@@ -1,5 +1,5 @@
 os.loadAPI("json.lua")
-local ecc = require("ecdsa")
+local ecc = require("ecc")
 
 local settings = json.decodeFromFile("settings.json")
 local channel = settings["channel"]
