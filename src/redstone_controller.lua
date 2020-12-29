@@ -26,7 +26,9 @@ end
 repeat
     handshake()
     sleep(1)
-until serverPublicKey != ""
+until serverPublicKey ~= ""
+
+print(serverPublicKey)
 
 while true do
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")

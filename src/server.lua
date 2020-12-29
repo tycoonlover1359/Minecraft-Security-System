@@ -48,4 +48,6 @@ local function websocketHandler()
     end
 end
 
+print(pk)
+
 parallel.waitForAny(modemHandler, websocketHandler)
