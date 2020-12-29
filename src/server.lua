@@ -5,6 +5,7 @@ local settings = json.decodeFromFile("settings.json")
 local channel = settings["channel"]
 local websocket_url = settings["websocket_url"]
 
+local modem = peripheral.find("modem")
 local websocket = http.websocket(websocket_url)
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
