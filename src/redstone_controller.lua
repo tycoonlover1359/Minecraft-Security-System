@@ -13,6 +13,7 @@ local serverPublicKey = ""
 modem.open(channel)
 
 function handshake()
+    print("initiating handshake with server")
     local payload = {}
     payload.action = "handshake"
     modem.transmit(channel, channel, payload)
@@ -22,12 +23,17 @@ function handshake()
     end
 end
 
-handshake()
+repeat
+    handshake()
+    sleep(1)
+until serverPublicKey != ""
 
 while true do
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
     if event == "modem_message" then
+        print("message received")
         if ecc.verify(serverPublicKey, message.payload, message.payload_signature) then
+            print("message verified")
             local payload = json.decode(message.payload)
             if payload.recepient_id == id or payload.recepient_id == "all" then
                 if payload.action == "shutdown" then
