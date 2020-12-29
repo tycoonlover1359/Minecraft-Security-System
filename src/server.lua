@@ -9,6 +9,7 @@ local websocket = http.websocket(websocket_url)
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
 local function refreshWebsocket()
+    print("Refreshing websocket")
     if websocket.isOpen() then websocket.close() end
     websocket = http.websocket(websocket_url)
 end
@@ -37,6 +38,7 @@ local function websocketHandler()
         if event == "websocket_closed" then
             refreshWebsocket()
         elseif event == "websocket_message" then
+            print("Received message from websocket: \n" .. contents)
             local messageToTransmit = {
                 ["payload"] = contents,
                 ["payload_signature"] = ecc.sign(secretKey, payload),
