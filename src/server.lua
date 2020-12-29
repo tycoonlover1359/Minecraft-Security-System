@@ -34,18 +34,22 @@ end
 
 local function websocketHandler()
     while true do
-        local event, url, contents, binary = os.pullEvent({"websocket_message", "websocket_closed"})
-        if event == "websocket_closed" then
-            refreshWebsocket()
-        elseif event == "websocket_message" then
-            print("Received message from websocket: \n" .. contents)
-            local messageToTransmit = {
-                ["payload"] = contents,
-                ["payload_signature"] = ecc.sign(secretKey, payload),
-                ["public_key"] = publicKey
-            }
-            modem.transmit(channel, channel, messageToTransmit)
+        local message, isBinary = websocket.recieve()
+        if not isBinary then
+            print("Message received from websocket: " .. message)
         end
+        -- local event, url, contents, binary = os.pullEvent({"websocket_message", "websocket_closed"})
+        -- if event == "websocket_closed" then
+        --     refreshWebsocket()
+        -- elseif event == "websocket_message" then
+        --     print("Received message from websocket: \n" .. contents)
+        --     local messageToTransmit = {
+        --         ["payload"] = contents,
+        --         ["payload_signature"] = ecc.sign(secretKey, payload),
+        --         ["public_key"] = publicKey
+        --     }
+        --     modem.transmit(channel, channel, messageToTransmit)
+        -- end
     end
 end
 
