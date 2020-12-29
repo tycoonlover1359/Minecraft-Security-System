@@ -34,9 +34,16 @@ end
 
 local function websocketHandler()
     while true do
+        if not websocket.isOpen() then
+            refreshWebsocket()
+        end
         local message, isBinary = websocket.receive()
         if not isBinary then
-            print("Message received from websocket: " .. message)
+            if message then
+                print("Message received from websocket: " .. message)
+            else
+                print("Empty message received from websocket.")
+            end
         end
         -- local event, url, contents, binary = os.pullEvent({"websocket_message", "websocket_closed"})
         -- if event == "websocket_closed" then
