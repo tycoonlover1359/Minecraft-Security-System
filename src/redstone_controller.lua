@@ -8,11 +8,26 @@ local id = settings["id"]
 local modem = peripheral.find("modem")
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
-while true do
-    modem.open(channel)
+local serverPublicKey = ""
+
+modem.open(channel)
+
+function handshake()
+    local payload = {}
+    payload.action = "handshake"
+    modem.transmit(channel, channel, payload)
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
     if event == "modem_message" then
-        if ecc.verify(message.public_key, message.payload, message.payload_signature) then
+        serverPublicKey = message
+    end
+end
+
+handshake()
+
+while true do
+    local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
+    if event == "modem_message" then
+        if ecc.verify(serverPublicKey, message.payload, message.payload_signature) then
             local payload = json.decode(message.payload)
             if payload.recepient_id == id or payload.recepient_id == "all" then
                 if payload.action == "shutdown" then

@@ -19,10 +19,14 @@ local function modemHandler()
         if not websocket.isOpen() then
             refreshWebsocket()
         end
-        if ecc.verify(message.public_key, message.payload, message.payload_signature) then
-            websocket.send(message.payload)
+        if message.action == "handshake" then
+            modem.transmit(1, 1, publicKey)
         else
-            modem.transmit(channel, channel, "Invalid Signature")
+            if ecc.verify(message.public_key, message.payload, message.payload_signature) then
+                websocket.send(message.payload)
+            else
+                modem.transmit(channel, channel, "Invalid Signature")
+            end
         end
     end
 end
