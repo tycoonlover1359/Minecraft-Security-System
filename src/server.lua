@@ -1,4 +1,4 @@
-os.loadAPI("json")
+os.loadAPI("json.lua")
 local ecc = require("ecc")
 
 local settings = json.decodeFromFile("settings.json")
@@ -46,3 +46,5 @@ local function websocketHandler()
         end
     end
 end
+
+parallel.waitForAny(modemHandler, websocketHandler)
