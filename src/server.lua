@@ -34,7 +34,7 @@ end
 
 local function websocketHandler()
     while true do
-        local message, isBinary = websocket.recieve()
+        local message, isBinary = websocket.receive()
         if not isBinary then
             print("Message received from websocket: " .. message)
         end
