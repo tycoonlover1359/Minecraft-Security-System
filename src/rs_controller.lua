@@ -66,38 +66,40 @@ while true do
         if message == "rhs" then
             handshake()
         else
-            local toVerify = message.payload .. message.timestamp
-            if ecc.verify(serverPublicKey, toVerify, message.payload_signature) then
-                print("MCSS Server Message Verified: " .. json.encode(message))
-                print(message.payload)
-                print(os.epoch("utc") - message.timestamp)
-                if os.epoch("utc") - message.timestamp < 15000 then
-                    local payload = json.decode(message.payload)
-                    if payload.recepient_id == id or payload.recepient_id == "all" then
-                        if payload.action == "shutdown" then
-                            print("MCSS Client Shutdown Command Received")
-                            print("Closing Modem Connection")
-                            modem.closeAll()
-                            print("Shutting Down...")
-                            sleep(3)
-                            os.shutdown()
-                        elseif payload.action == "redstoneUpdate" then
-                            if payload.redstoneStatus == "true" or payload.redstoneStatus == true then
-                                redstone.setOutput(outputSide, true)
-                            elseif payload.redstoneStatus == "false" or payload.redstoneStatus == false then
+            if message.payload then
+                local toVerify = message.payload .. message.timestamp
+                if ecc.verify(serverPublicKey, toVerify, message.payload_signature) then
+                    print("MCSS Server Message Verified: " .. json.encode(message))
+                    print(message.payload)
+                    print(os.epoch("utc") - message.timestamp)
+                    if os.epoch("utc") - message.timestamp < 15000 then
+                        local payload = json.decode(message.payload)
+                        if payload.recepient_id == id or payload.recepient_id == "all" then
+                            if payload.action == "shutdown" then
+                                print("MCSS Client Shutdown Command Received")
+                                print("Closing Modem Connection")
+                                modem.closeAll()
+                                print("Shutting Down...")
+                                sleep(3)
+                                os.shutdown()
+                            elseif payload.action == "redstoneUpdate" then
+                                if payload.redstoneStatus == "true" or payload.redstoneStatus == true then
+                                    redstone.setOutput(outputSide, true)
+                                elseif payload.redstoneStatus == "false" or payload.redstoneStatus == false then
+                                    redstone.setOutput(outputSide, false)
+                                end
+                            elseif payload.action == "tempOpen" then
                                 redstone.setOutput(outputSide, false)
+                                sleep(payload.openTime)
+                                redstone.setOutput(outputSide, true)
                             end
-                        elseif payload.action == "tempOpen" then
-                            redstone.setOutput(outputSide, false)
-                            sleep(payload.openTime)
-                            redstone.setOutput(outputSide, true)
                         end
+                    else
+                        print("Timestamp check failed")
                     end
                 else
-                    print("Timestamp check failed")
+                    print("MCSS Server Message Invalid: Invalid Signature")
                 end
-            else
-                print("MCSS Server Message Invalid: Invalid Signature")
             end
         end
     end
