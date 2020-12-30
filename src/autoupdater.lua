@@ -8,6 +8,7 @@ local function download(urlPath, filePath)
     request.close()
 end
 
+print("Updating the auto updater")
 download("autoupdater.lua", "autoupdater.lua")
 
 shell.run("main.lua")
