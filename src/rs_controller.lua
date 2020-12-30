@@ -34,6 +34,7 @@ function handshake()
             print("Handshake with MCSS Server Timed Out")
         end
         os.cancelTimer(timer)
+        sleep(1)
     until success
 end
 
