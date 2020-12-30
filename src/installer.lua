@@ -78,7 +78,7 @@ elseif settings["type"] == "mcss_redstone_controller" then
 
     term.write("MCSS Peripheral Output Side: ")
     local outputSide = read()
-    settings["side"] = outputSide
+    settings["outputSide"] = outputSide
 
     term.write("MCSS Channel (Nothing for Default): ")
     local channel = read()
