@@ -44,7 +44,7 @@ local function websocketHandler()
         local success, message, isBinary = pcall(function() return websocket.receive() end)
         if success and not isBinary then
             if message then
-                print("Message received from websocket: " .. message)
+                print("Message received from websocket: \n" .. message)
                 local epoch = os.epoch("utc")
                 local messageToTransmit = {
                     ["payload"] = message,
@@ -65,4 +65,5 @@ end
 print(publicKey)
 modem.open(channel)
 modem.transmit(1, 1, "rehandshake")
+
 parallel.waitForAny(modemHandler, websocketHandler)
