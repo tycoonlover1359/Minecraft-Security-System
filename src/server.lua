@@ -63,12 +63,8 @@ local function websocketHandler()
                         print("MCSS Network Shutdown Command Received")
                         print("Broadcasting Shutdown Command")
                         local epoch = os.epoch("utc")
-                        local payload = {
-                            ["action"] = "shutdown",
-                            ["recepient_id"] = "all"
-                        }
                         local messageToTransmit = {
-                            ["payload"] = json.encode(payload),
+                            ["payload"] = message,
                             ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
                             ["timestamp"] = epoch
                         }
