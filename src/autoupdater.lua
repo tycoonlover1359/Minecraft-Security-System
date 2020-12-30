@@ -21,4 +21,4 @@ if type == "mcss_server" then
     download("server.lua", "main.lua")
 end
 
---shell.run("main.lua")
+shell.run("main.lua")
