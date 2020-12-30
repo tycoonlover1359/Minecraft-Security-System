@@ -48,13 +48,15 @@ local function websocketHandler()
         if success and not isBinary then
             if message then
                 print("Websocket Message Received: \n" .. message)
-                if message.recepient_id == "server" then
-                    if message.action == "shutdown" then
+                local m = json.decode(message)
+                if m.recepient_id == "server" then
+                    if m.action == "shutdown" then
                         print("MCSS Shutdown Command Received")
                         print("Closing Websocket Conection")
                         websocket.close()
                         print("Shutting down...")
-                        sleep(1.5)
+                        sleep(2.5)
+                        os.shutdown()
                     end
                 else
                     local epoch = os.epoch("utc")
