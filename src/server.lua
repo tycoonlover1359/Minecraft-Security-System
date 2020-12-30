@@ -9,8 +9,6 @@ local modem = peripheral.find("modem")
 local websocket = http.websocket(websocket_url)
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
-local lastActivityTime = 0
-
 local function refreshWebsocket()
     websocket.close()
     websocket = http.websocket(websocket_url)
@@ -24,7 +22,6 @@ local function modemHandler()
             modem.transmit(1, 1, publicKey)
         else
             if ecc.verify(message.public_key, message.payload, message.payload_signature) then
-                lastActivityTime = os.epoch("utc")
                 local maxTries = 3
                 local tries = 0
                 repeat
@@ -44,7 +41,7 @@ end
 local function websocketHandler()
     while true do
         -- if success is false, then message is the error/traceback
-        local success, message, isBinary = pcall(function() return websocket.receive(15) end)
+        local success, message, isBinary = pcall(function() return websocket.receive() end)
         if success and not isBinary then
             if message then
                 print("Message received from websocket: " .. message)
@@ -57,16 +54,10 @@ local function websocketHandler()
                 print("Broadcasting message: " .. json.encode(messageToTransmit))
                 modem.transmit(channel, channel, messageToTransmit)
             else
-                if (os.epoch("utc") - lastActivityTime > 20000) and (lastActivityTime ~= 0) then
-                    print("Sleeping websocket connection")
-                    websocket.close()
-                    repeat
-                        sleep(1)
-                    until os.epoch("utc") - lastActivityTime < 20000
-                    print("Waking websocket connection")
-                    refreshWebsocket()
-                end
+                print("Empty message received from websocket.")
             end
+        else
+            refreshWebsocket()
         end
     end
 end
@@ -74,5 +65,4 @@ end
 print(publicKey)
 modem.open(channel)
 modem.transmit(1, 1, "rehandshake")
-
 parallel.waitForAny(modemHandler, websocketHandler)
