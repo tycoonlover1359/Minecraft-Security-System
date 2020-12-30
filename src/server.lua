@@ -51,7 +51,28 @@ local function websocketHandler()
                 local m = json.decode(message)
                 if m.recepient_id == "server" then
                     if m.action == "shutdown" then
-                        print("MCSS Shutdown Command Received")
+                        print("MCSS Server Shutdown Command Received")
+                        print("Closing Websocket Conection")
+                        websocket.close()
+                        print("Shutting down...")
+                        sleep(2.5)
+                        os.shutdown()
+                    end
+                elseif m.recepient_id == "all" then
+                    if m.action == "shutdown" then
+                        print("MCSS Network Shutdown Command Received")
+                        print("Broadcasting Shutdown Command")
+                        local epoch = os.epoch("utc")
+                        local payload = {
+                            ["action"] = "shutdown",
+                            ["recepient_id"] = "all"
+                        }
+                        local messageToTransmit = {
+                            ["payload"] = json.encode(payload),
+                            ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
+                            ["timestamp"] = epoch
+                        }
+                        modem.transmit(channel, channel, messageToTransmit)
                         print("Closing Websocket Conection")
                         websocket.close()
                         print("Shutting down...")
