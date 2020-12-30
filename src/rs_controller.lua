@@ -26,10 +26,14 @@ local function handshake()
         local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw()
         if event == "modem_message" then
             if type(message) == "table" then
-                success = true
-                os.cancelTimer(timer)
-                print("Handshake with MCSS Server Successful")
-                serverPublicKey = message
+                if message.id ~= nil and message.id == "server" then
+                    success = true
+                    os.cancelTimer(timer)
+                    print("Handshake with MCSS Server successful")
+                    serverPublicKey = message.public_key
+                else
+                    print("Handshake with MCSS Server Failed")
+                end
             else
                 print("Handshake with MCSS Server Failed")
             end

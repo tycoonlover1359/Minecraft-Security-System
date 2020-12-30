@@ -21,7 +21,11 @@ local function modemHandler()
         local event, side, frequency, replyFrequency, message, distance = os.pullEvent("modem_message")
         if message.action == "handshake" then
             print("Receiving Handshake from MCSS Client")
-            modem.transmit(1, 1, publicKey)
+            local payload = {
+                ["public_key"] = publicKey,
+                ["id"] = "server"
+            }
+            modem.transmit(1, 1, payload)
             clientPublicKeys[message.id] = message.public_key
         else
             if ecc.verify(clientPublicKeys[message.id], message.payload, message.payload_signature) then
