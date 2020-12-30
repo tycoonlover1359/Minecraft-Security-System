@@ -65,7 +65,9 @@ local function websocketHandler()
     end
 end
 
-print(publicKey)
+term.clear()
+term.setCursorPos(1,1)
+print("MCSS Server Running")
 modem.open(channel)
 modem.transmit(1, 1, "rehandshake")
 
