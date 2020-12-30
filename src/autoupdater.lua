@@ -19,6 +19,9 @@ local type = settings["type"]
 if type == "mcss_server" then
     print("Downloading MCSS Server")
     download("server.lua", "main.lua")
+elseif type == "mcss_redstone_controller" then
+    print("Downloading MCSS Redstone Controller Client")
+    download("rs_controller.lua", "main.lua")
 end
 
 shell.run("main.lua")
