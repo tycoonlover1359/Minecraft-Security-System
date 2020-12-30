@@ -48,14 +48,24 @@ local function websocketHandler()
         if success and not isBinary then
             if message then
                 print("Websocket Message Received: \n" .. message)
-                local epoch = os.epoch("utc")
-                local messageToTransmit = {
-                    ["payload"] = message,
-                    ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
-                    ["timestamp"] = epoch
-                }
-                print("Broadcasting Websocket Message: " .. json.encode(messageToTransmit))
-                modem.transmit(channel, channel, messageToTransmit)
+                if message.recepient_id == "server" then
+                    if message.action == "shutdown" then
+                        print("MCSS Shutdown Command Received")
+                        print("Closing Websocket Conection")
+                        websocket.close()
+                        print("Shutting down...")
+                        sleep(1.5)
+                    end
+                else
+                    local epoch = os.epoch("utc")
+                    local messageToTransmit = {
+                        ["payload"] = message,
+                        ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
+                        ["timestamp"] = epoch
+                    }
+                    print("Broadcasting Websocket Message: " .. json.encode(messageToTransmit))
+                    modem.transmit(channel, channel, messageToTransmit)
+                end
             else
                 print("Empty Websocket Message Received")
             end
