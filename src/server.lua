@@ -52,6 +52,8 @@ local function websocketHandler()
                 if m.recepient_id == "server" then
                     if m.action == "shutdown" then
                         print("MCSS Server Shutdown Command Received")
+                        print("Closing Modem Connection")
+                        modem.closeAll()
                         print("Closing Websocket Conection")
                         websocket.close()
                         print("Shutting down...")
@@ -69,6 +71,8 @@ local function websocketHandler()
                             ["timestamp"] = epoch
                         }
                         modem.transmit(channel, channel, messageToTransmit)
+                        print("Closing Modem Connection")
+                        modem.closeAll()
                         print("Closing Websocket Conection")
                         websocket.close()
                         print("Shutting down...")

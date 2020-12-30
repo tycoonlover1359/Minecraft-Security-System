@@ -58,6 +58,10 @@ while true do
                     local payload = json.decode(message.payload)
                     if payload.recepient_id == id or payload.recepient_id == "all" then
                         if payload.action == "shutdown" then
+                            print("MCSS Client Shutdown Command Received")
+                            print("Closing Modem Connection")
+                            modem.closeAll()
+                            print("Shutting Down...")
                             sleep(3)
                             os.shutdown()
                         elseif payload.action == "redstoneUpdate" then
