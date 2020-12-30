@@ -40,7 +40,7 @@ end
 
 handshake()
 
-print("Server Public Key: " .. serverPublicKey)
+print("Server Public Key: " .. json.encode(serverPublicKey))
 
 while true do
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
