@@ -4,7 +4,7 @@ local ecc = require("ecc")
 local settings = json.decodeFromFile("settings.json")
 local channel = settings["channel"]
 local id = settings["id"]
-local outputSide = settings["side"]
+local outputSide = settings["outputSide"]
 
 local modem = peripheral.find("modem")
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
