@@ -14,28 +14,30 @@ local serverPublicKey = ""
 modem.open(channel)
 
 function handshake()
-    print("Initiating Handshake with MCSS Server")
-    local payload = {}
-    payload.action = "handshake"
-    payload.public_key = publicKey
-    payload.id = id
-    modem.transmit(channel, channel, payload)
-    local timer = os.startTimer(5)
-    local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw({"modem_message", "timer"})
-    if event == "modem_message" then
+    local success = false
+    repeat
+        print("Initiating Handshake with MCSS Server")
+        local payload = {}
+        payload.action = "handshake"
+        payload.public_key = publicKey
+        payload.id = id
+        modem.transmit(channel, channel, payload)
+        local timer = os.startTimer(5)
+        local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw()
+        if event == "modem_message" then
+            success = true
+            os.cancelTimer(timer)
+            print("Handshake with MCSS Server Successful")
+            serverPublicKey = message
+        elseif event == "timer" then
+            os.cancelTimer(timer)
+            print("Handshake with MCSS Server Timed Out")
+        end
         os.cancelTimer(timer)
-        print("Handshake with MCSS Server Successful")
-        serverPublicKey = message
-    elseif event == "timer" then
-        os.cancelTimer(timer)
-        print("Handshake with MCSS Server Failed: Request Timed Out")
-    end
+    until success
 end
 
-repeat
-    handshake()
-    sleep(1)
-until serverPublicKey ~= ""
+handshake()
 
 print(serverPublicKey)
 
