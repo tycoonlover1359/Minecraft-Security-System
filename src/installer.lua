@@ -11,6 +11,9 @@ end
 term.clear()
 term.setCursorPos(1,1)
 
+print("Downloading Autoupdater")
+download("autoupdater.lua", "autoupdater.lua")
+
 print("Downloading JSON API")
 download("APIs/json.lua", "json.lua")
 
