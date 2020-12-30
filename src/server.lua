@@ -45,11 +45,13 @@ local function websocketHandler()
         if success and not isBinary then
             if message then
                 print("Message received from websocket: " .. message)
-                local message messageToTransmit = {
+                local epoch = os.epoch("utc")
+                local messageToTransmit = {
                     ["payload"] = message,
-                    ["payload_signature"] = ecc.sign(secretKey, message)
+                    ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
+                    ["timestamp"] = epoch
                 }
-                print("Broadcasting message: " .. messageToTransmit")
+                print("Broadcasting message: " .. json.encode(messageToTransmit))
                 modem.transmit(channel, channel, messageToTransmit)
             else
                 print("Empty message received from websocket.")
