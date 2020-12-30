@@ -35,9 +35,9 @@ while true do
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
     if event == "modem_message" then
         print("message received")
-        local toVerify = message.payload + message.timestamp
+        local toVerify = message.payload .. message.timestamp
         if ecc.verify(serverPublicKey, toVerify, message.payload_signature) then
-            print("message verified: " .. message)
+            print("message verified: " .. json.encode(message))
             print(message.payload)
             if os.epoch("utc") - message.timestamp < 15 then
                 local payload = json.decode(message.payload)
