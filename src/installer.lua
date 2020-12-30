@@ -54,5 +54,51 @@ term.clear()
 term.setCursorPos(1,1)
 
 if settings["type"] == "mcss_server" then
-    
+    term.write("MCSS Network ID: ")
+    local networkId = read()
+    term.write("MCSS Network API Key: ")
+    local apiKey = read("*")
+    settings["websocket_url"] = "wss://4qcxx1npyb.execute-api.us-west-2.amazonaws.com/development?networkid=" .. networkId .. "&authorization=" .. apiKey
+
+    term.write("MCSS Channel (Nothing for Default): ")
+    local channel = read()
+    if channel = "" then channel = 1 end
+    settings["channel"] = channel
+elseif settings["type"] == "mcss_redstone_controller" then
+    term.write("MCSS Peripheral ID: ")
+    local peripheralId = read()
+    settings["id"] = peripheralId
+
+    term.write("MCSS Peripheral Output Side: ")
+    local outputSide = read()
+    settings["side"] = outputSide
+
+    term.write("MCSS Channel (Nothing for Default): ")
+    local channel = read()
+    if channel = "" then channel = 1 end
+    settings["channel"] = channel
 end
+
+os.loadAPI("json.lua")
+
+term.clear()
+term.setCursorPos(1,1)
+
+print("Saving Settings")
+local file = fs.open("settings.json", "w")
+file.write(json.encode(settings))
+file.close()
+sleep(1)
+
+print("Saving Startup File")
+local file = fs.open("startup.lua", "w")
+file.write([[shell.run("main.lua")]])
+file.close()
+
+term.clear()
+term.setCursorPos(1,1)
+
+print("Restarting")
+sleep(3)
+
+os.reboot()
