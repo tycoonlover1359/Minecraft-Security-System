@@ -42,7 +42,7 @@ local function handshake()
             print("Handshake with MCSS Server Timed Out")
         end
         os.cancelTimer(timer)
-        sleep(1)
+        sleep(1 + math.random() * 3)
     until success
 end
 
