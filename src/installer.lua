@@ -66,7 +66,7 @@ if settings["type"] == "mcss_server" then
 
     term.write("MCSS Channel (Nothing for Default): ")
     local channel = read()
-    if channel = "" then channel = 1 end
+    if channel == "" then channel = 1 end
     settings["channel"] = channel
 elseif settings["type"] == "mcss_redstone_controller" then
     term.write("MCSS Peripheral ID: ")
