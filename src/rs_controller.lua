@@ -40,7 +40,7 @@ end
 
 local function checkServerPublicKey()
     repeat
-        if type(serverPublicKey) != "table" then
+        if type(serverPublicKey) ~= "table" then
             print("Invalid Server Public Key")
             print("Rehandshaking with Server")
             serverPublicKey = ""
