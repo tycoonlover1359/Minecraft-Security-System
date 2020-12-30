@@ -54,11 +54,15 @@ term.clear()
 term.setCursorPos(1,1)
 
 if settings["type"] == "mcss_server" then
+    term.write("API Gateway ID: ")
+    local gatewayId = read()
+    term.write("API Gateway Stage: ")
+    local gatewayStage = read()
     term.write("MCSS Network ID: ")
     local networkId = read()
     term.write("MCSS Network API Key: ")
     local apiKey = read("*")
-    settings["websocket_url"] = "wss://4qcxx1npyb.execute-api.us-west-2.amazonaws.com/development?networkid=" .. networkId .. "&authorization=" .. apiKey
+    settings["websocket_url"] = "wss://" .. gatewayId .. ".execute-api.us-west-2.amazonaws.com/" .. gatewayStage .."?networkid=" .. networkId .. "&authorization=" .. apiKey
 
     term.write("MCSS Channel (Nothing for Default): ")
     local channel = read()
