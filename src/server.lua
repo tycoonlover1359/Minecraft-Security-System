@@ -82,6 +82,15 @@ local function websocketHandler()
                         print("Shutting down...")
                         sleep(2.5)
                         os.shutdown()
+                    else
+                        local epoch = os.epoch("utc")
+                        local messageToTransmit = {
+                            ["payload"] = message,
+                            ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
+                            ["timestamp"] = epoch
+                        }
+                    print("Broadcasting Websocket Message: " .. json.encode(messageToTransmit))
+                    modem.transmit(channel, channel, messageToTransmit)
                     end
                 else
                     local epoch = os.epoch("utc")
