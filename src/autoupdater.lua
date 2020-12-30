@@ -17,7 +17,8 @@ local settings = json.decodeFromFile("settings.json")
 local type = settings["type"]
 
 if type == "server" then
+    print("Downloading MCSS Server")
     download("server.lua", "main.lua")
 end
 
-shell.run("main.lua")
+--shell.run("main.lua")
