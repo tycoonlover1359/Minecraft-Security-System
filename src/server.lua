@@ -18,6 +18,7 @@ local function modemHandler()
     while true do
         local event, side, frequency, replyFrequency, message, distance = os.pullEvent("modem_message")
         if message.action == "handshake" then
+            print("Receiving handshake from client")
             modem.transmit(1, 1, publicKey)
         else
             if ecc.verify(message.public_key, message.payload, message.payload_signature) then
@@ -25,7 +26,7 @@ local function modemHandler()
                 local tries = 0
                 repeat
                     tries = tries + 1
-                    success, err = pcall(function() websocket.send(message.payload) end()
+                    success, err = pcall(function() websocket.send(message.payload) end)
                 until success or tries == maxTries
                 if not success then
                     print("Error occurred: " + err)
@@ -40,7 +41,7 @@ end
 local function websocketHandler()
     while true do
         -- if success is false, then message is the error/traceback
-        local success, message, isBinary = pcall(function() websocket.receive() end)
+        local success, message, isBinary = pcall(function() return websocket.receive() end)
         if success and not isBinary then
             if message then
                 print("Message received from websocket: " .. message)
@@ -59,6 +60,6 @@ local function websocketHandler()
     end
 end
 
-print(pk)
-
+print(publicKey)
+modem.open(channel)
 parallel.waitForAny(modemHandler, websocketHandler)
