@@ -14,15 +14,21 @@ local serverPublicKey = ""
 modem.open(channel)
 
 function handshake()
-    print("initiating handshake with server")
+    print("Initiating Handshake with MCSS Server")
     local payload = {}
     payload.action = "handshake"
     payload.public_key = publicKey
     payload.id = id
     modem.transmit(channel, channel, payload)
-    local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
+    local timer = os.startTimer(5)
+    local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw({"modem_message", "timer"})
     if event == "modem_message" then
+        os.cancelTimer(timer)
+        print("Handshake with MCSS Server Successful")
         serverPublicKey = message
+    elseif event == "timer" then
+        os.cancelTimer(timer)
+        print("Handshake with MCSS Server Failed: Request Timed Out")
     end
 end
 
@@ -36,13 +42,13 @@ print(serverPublicKey)
 while true do
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
     if event == "modem_message" then
-        print("message received")
+        print("Message Received from MCSS Server")
         if message == "rehandshake" then
             handshake()
         else
             local toVerify = message.payload .. message.timestamp
             if ecc.verify(serverPublicKey, toVerify, message.payload_signature) then
-                print("message verified: " .. json.encode(message))
+                print("MCSS Server Message Verified: " .. json.encode(message))
                 print(message.payload)
                 print(os.epoch("utc") - message.timestamp)
                 if os.epoch("utc") - message.timestamp < 15000 then
@@ -66,6 +72,8 @@ while true do
                 else
                     print("Timestamp check failed")
                 end
+            else
+                print("MCSS Server Message Invalid: Invalid Signature")
             end
         end
     end

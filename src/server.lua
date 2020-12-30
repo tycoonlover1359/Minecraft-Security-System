@@ -20,7 +20,7 @@ local function modemHandler()
     while true do
         local event, side, frequency, replyFrequency, message, distance = os.pullEvent("modem_message")
         if message.action == "handshake" then
-            print("Receiving handshake from client")
+            print("Receiving Handshake from MCSS Client")
             modem.transmit(1, 1, publicKey)
             clientPublicKeys[message.id] = message.public_key
         else
@@ -35,7 +35,7 @@ local function modemHandler()
                     print("Error occurred: " + err)
                 end
             else
-                modem.transmit(channel, channel, "Invalid Signature")
+                modem.transmit(channel, channel, "MCSS Client Message Invalid: Invalid Signature")
             end
         end
     end
@@ -47,17 +47,17 @@ local function websocketHandler()
         local success, message, isBinary = pcall(function() return websocket.receive() end)
         if success and not isBinary then
             if message then
-                print("Message received from websocket: \n" .. message)
+                print("Websocket Message Received: \n" .. message)
                 local epoch = os.epoch("utc")
                 local messageToTransmit = {
                     ["payload"] = message,
                     ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
                     ["timestamp"] = epoch
                 }
-                print("Broadcasting message: " .. json.encode(messageToTransmit))
+                print("Broadcasting Websocket Message: " .. json.encode(messageToTransmit))
                 modem.transmit(channel, channel, messageToTransmit)
             else
-                print("Empty message received from websocket.")
+                print("Empty Websocket Message Received")
             end
         else
             refreshWebsocket()
