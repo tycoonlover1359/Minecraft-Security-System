@@ -45,7 +45,7 @@ print(serverPublicKey)
 while true do
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
     if event == "modem_message" then
-        print("Message Received from MCSS Server")
+        print("Message Received from MCSS Server: " .. message)
         if message == "rhs" then
             handshake()
         else
