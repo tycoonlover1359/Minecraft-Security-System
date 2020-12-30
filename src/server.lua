@@ -64,4 +64,5 @@ end
 
 print(publicKey)
 modem.open(channel)
+modem.transmit(1, 1, "rehandshake")
 parallel.waitForAny(modemHandler, websocketHandler)
