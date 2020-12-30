@@ -46,7 +46,7 @@ while true do
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
     if event == "modem_message" then
         print("Message Received from MCSS Server")
-        if message == "rehandshake" then
+        if message == "rhs" then
             handshake()
         else
             local toVerify = message.payload .. message.timestamp

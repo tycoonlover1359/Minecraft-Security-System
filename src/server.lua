@@ -102,6 +102,6 @@ term.clear()
 term.setCursorPos(1,1)
 print("MCSS Server Running")
 modem.open(channel)
-modem.transmit(1, 1, "rehandshake")
+modem.transmit(1, 1, "rhs")
 
 parallel.waitForAny(modemHandler, websocketHandler)
