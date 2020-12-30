@@ -43,7 +43,7 @@ repeat
         success = true
         settings["type"] = "mcss_redstone_controller"
         print("Downloading MCSS Redstone Controller")
-        download("rs_controller.lua")
+        download("rs_controller.lua", "main.lua")
     else
         print("Invalid Option")
     end
@@ -92,7 +92,7 @@ sleep(1)
 
 print("Saving Startup File")
 local file = fs.open("startup.lua", "w")
-file.write([[shell.run("main.lua")]])
+file.write([[shell.run("autoupdater.lua")]])
 file.close()
 
 term.clear()
