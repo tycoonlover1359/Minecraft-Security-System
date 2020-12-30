@@ -49,7 +49,7 @@ local function websocketHandler()
                     ["payload"] = message,
                     ["payload_signature"] = ecc.sign(secretKey, message)
                 }
-                print("Broadcasting message")
+                print("Broadcasting message: " .. messageToTransmit")
                 modem.transmit(channel, channel, messageToTransmit)
             else
                 print("Empty message received from websocket.")

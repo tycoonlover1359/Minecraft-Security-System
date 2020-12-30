@@ -35,7 +35,7 @@ while true do
     if event == "modem_message" then
         print("message received")
         if ecc.verify(serverPublicKey, message.payload, message.payload_signature) then
-            print("message verified")
+            print("message verified: " .. message)
             print(message.payload)
             local payload = json.decode(message.payload)
             if payload.recepient_id == id or payload.recepient_id == "all" then
