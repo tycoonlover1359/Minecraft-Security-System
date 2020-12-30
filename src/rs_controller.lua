@@ -44,6 +44,7 @@ local function checkServerPublicKey()
             print("Invalid Server Public Key")
             print("Rehandshaking with Server")
             serverPublicKey = ""
+            handshake()
         end
     until type(serverPublicKey) == "table"
 end
