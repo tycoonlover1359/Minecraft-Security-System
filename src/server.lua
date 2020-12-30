@@ -21,7 +21,15 @@ local function modemHandler()
             modem.transmit(1, 1, publicKey)
         else
             if ecc.verify(message.public_key, message.payload, message.payload_signature) then
-                websocket.send(message.payload)
+                local maxTries = 3
+                local tries = 0
+                repeat
+                    tries = tries + 1
+                    success, err = pcall(function() websocket.send(message.payload) end()
+                until success or tries == maxTries
+                if not success then
+                    print("Error occurred: " + err)
+                end
             else
                 modem.transmit(channel, channel, "Invalid Signature")
             end
@@ -31,8 +39,9 @@ end
 
 local function websocketHandler()
     while true do
-        local message, isBinary = websocket.receive()
-        if not isBinary then
+        -- if success is false, then message is the error/traceback
+        local success, message, isBinary = pcall(function() websocket.receive() end)
+        if success and not isBinary then
             if message then
                 print("Message received from websocket: " .. message)
                 local message messageToTransmit = {
@@ -44,6 +53,8 @@ local function websocketHandler()
             else
                 print("Empty message received from websocket.")
             end
+        else
+            refreshWebsocket()
         end
     end
 end
