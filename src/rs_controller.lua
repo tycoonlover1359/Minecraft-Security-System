@@ -17,6 +17,8 @@ function handshake()
     print("initiating handshake with server")
     local payload = {}
     payload.action = "handshake"
+    payload.public_key = publicKey
+    payload.id = id
     modem.transmit(channel, channel, payload)
     local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
     if event == "modem_message" then

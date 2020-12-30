@@ -9,6 +9,8 @@ local modem = peripheral.find("modem")
 local websocket = http.websocket(websocket_url)
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
+local clientPublicKeys = {}
+
 local function refreshWebsocket()
     websocket.close()
     websocket = http.websocket(websocket_url)
@@ -20,8 +22,9 @@ local function modemHandler()
         if message.action == "handshake" then
             print("Receiving handshake from client")
             modem.transmit(1, 1, publicKey)
+            clientPublicKeys[message.id] = message.public_key
         else
-            if ecc.verify(message.public_key, message.payload, message.payload_signature) then
+            if ecc.verify(clientPublicKeys[message.id], message.payload, message.payload_signature) then
                 local maxTries = 3
                 local tries = 0
                 repeat
