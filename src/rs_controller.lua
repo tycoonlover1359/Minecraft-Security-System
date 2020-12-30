@@ -4,7 +4,7 @@ local ecc = require("ecc")
 local settings = json.decodeFromFile("settings.json")
 local channel = settings["channel"]
 local id = settings["id"]
-local side = settings["side"]
+local outputSide = settings["side"]
 
 local modem = peripheral.find("modem")
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
@@ -39,7 +39,8 @@ while true do
         if ecc.verify(serverPublicKey, toVerify, message.payload_signature) then
             print("message verified: " .. json.encode(message))
             print(message.payload)
-            if os.epoch("utc") - message.timestamp < 15 then
+            print(os.epoch("utc") - message.timestamp)
+            if os.epoch("utc") - message.timestamp < 15000 then
                 local payload = json.decode(message.payload)
                 if payload.recepient_id == id or payload.recepient_id == "all" then
                     if payload.action == "shutdown" then
