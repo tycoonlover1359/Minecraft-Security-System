@@ -2,7 +2,7 @@ local baseUrl = "https://gitlab.com/tycoonlover1359/Minecraft-Security-System/-/
 
 local function download(urlPath, filePath)
     local request = http.get(baseUrl .. urlPath)
-    local file = fs.open(filePath)
+    local file = fs.open(filePath, "w")
     file.write(request.readAll())
     file.close()
     request.close()
