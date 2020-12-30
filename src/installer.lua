@@ -39,7 +39,7 @@ repeat
         settings["type"] = "mcss_server"
         print("Downloading MCSS Server")
         download("server.lua", "main.lua")
-    elseif input == "2"
+    elseif input == "2" then 
         success = true
         settings["type"] = "mcss_redstone_controller"
         print("Downloading MCSS Redstone Controller")
