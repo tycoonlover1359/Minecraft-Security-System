@@ -61,7 +61,7 @@ until success
 term.clear()
 term.setCursorPos(1,1)
 
-if settings["type"] == "mcss_server" settings["type"] == "mcss_admin" then
+if settings["type"] == "mcss_server" or settings["type"] == "mcss_admin" then
     term.write("API Gateway ID: ")
     local gatewayId = read()
     term.write("API Gateway Stage: ")
