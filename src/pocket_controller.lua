@@ -20,6 +20,24 @@ local function refreshWebsocket()
     websocket = http.websocket(websocket_url .. "&authorization=" .. apiKey)
 end
 
+local function websocketRequest(data, tries)
+    if not tries then tries = 1 end
+    local requestData = json.encode(data)
+    local success, response, isBinary = pcall(function() 
+        websocket.send(requestData)
+        return websocket.receive(5)
+    end)
+    if success then 
+        return json.decode(response)
+    elseif tries < 3 then
+        refreshWebsocket()
+        sleep(math.random() * 3)
+        websocketRequest(data)
+    else
+        return nil
+    end
+end
+
 local function paginate(items)
     local count = 1
     local pages = {}
