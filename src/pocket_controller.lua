@@ -48,16 +48,12 @@ local function paginate(items)
             table.insert(pages, page)
             break 
         end
-        page:add(items[count], nil, currentX, currentY, currentX + 10, currentY, colors.blue, colors.lime)
+        page:add(items[count], nil, currentX, currentY, currentX + 22, currentY, colors.blue, colors.lime)
         currentY = currentY + 2
-        if currentY >= maxY then
-            currentX = 15
-            currentY = 2
-        end
-        if count % 18 == 0 or count == #items then
+        if count % 9 == 0 or count == #items then
             table.insert(pages, page)
             page = touchpoint.new()
-            currentX = 2
+            currentY = 2
         end
         count = count + 1
     until count == #items + 1
