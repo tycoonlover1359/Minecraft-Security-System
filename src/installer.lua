@@ -47,6 +47,11 @@ repeat
         settings["type"] = "mcss_redstone_controller"
         print("Downloading MCSS Redstone Controller")
         download("rs_controller.lua", "main.lua")
+    elseif input == "3" then success
+        success = true
+        settings["type"] = "mcss_admin"
+        print("Downloading MCSS Administrator Panel")
+        download("pocket_controller.lua", "main.lua")
     else
         print("Invalid Option")
     end
@@ -56,7 +61,7 @@ until success
 term.clear()
 term.setCursorPos(1,1)
 
-if settings["type"] == "mcss_server" then
+if settings["type"] == "mcss_server" settings["type"] == "mcss_admin" then
     term.write("API Gateway ID: ")
     local gatewayId = read()
     term.write("API Gateway Stage: ")
@@ -67,10 +72,15 @@ if settings["type"] == "mcss_server" then
     local apiKey = read("*")
     settings["websocket_url"] = "wss://" .. gatewayId .. ".execute-api.us-west-2.amazonaws.com/" .. gatewayStage .."?networkid=" .. networkId .. "&authorization=" .. apiKey
 
-    term.write("MCSS Channel (Nothing for Default): ")
-    local channel = read()
-    if channel == "" then channel = 1 end
-    settings["channel"] = channel
+    if settings["type"] == "mcss_server" then
+        settings["websocket_url"] = settings["websocket_url"] + "&type=server"
+        term.write("MCSS Channel (Nothing for Default): ")
+        local channel = read()
+        if channel == "" then channel = 1 end
+        settings["channel"] = channel
+    else
+        settings["websocket_url"] = settings["websocket_url"] + "&type=admin"
+    end
 elseif settings["type"] == "mcss_redstone_controller" then
     term.write("MCSS Peripheral ID: ")
     local peripheralId = read()
