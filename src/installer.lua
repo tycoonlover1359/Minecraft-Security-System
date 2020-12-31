@@ -47,7 +47,7 @@ repeat
         settings["type"] = "mcss_redstone_controller"
         print("Downloading MCSS Redstone Controller")
         download("rs_controller.lua", "main.lua")
-    elseif input == "3" then success
+    elseif input == "3" then
         success = true
         settings["type"] = "mcss_admin"
         print("Downloading MCSS Administrator Panel")
