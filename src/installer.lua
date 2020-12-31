@@ -8,6 +8,11 @@ local function download(urlPath, filePath)
     request.close()
 end
 
+local function getInput(prompt, replacement)
+    term.write(prompt)
+    return read(replacement)
+end
+
 term.clear()
 term.setCursorPos(1,1)
 
@@ -35,8 +40,7 @@ repeat
     print("[2] MCSS Redstone Controller")
     print("[3] MCSS Pocket Admin Panel")
     print(" ")
-    term.write("Enter Type Number: ")
-    local input = read()
+    local input = getInput("Enter Type Number: ")
 
     if input == "1" then
         success = true
@@ -64,37 +68,20 @@ until success
 term.clear()
 term.setCursorPos(1,1)
 
-if settings["type"] == "mcss_server" or settings["type"] == "mcss_pocket_admin" then
-    term.write("API Gateway ID: ")
-    local gatewayId = read()
-    term.write("API Gateway Stage: ")
-    local gatewayStage = read()
-    term.write("MCSS Network ID: ")
-    local networkId = read()
-    term.write("MCSS Network API Key: ")
-    local apiKey = read("*")
-    settings["websocket_url"] = "wss://" .. gatewayId .. ".execute-api.us-west-2.amazonaws.com/" .. gatewayStage .."?networkid=" .. networkId .. "&authorization=" .. apiKey
-
-    if settings["type"] == "mcss_server" then
-        settings["websocket_url"] = settings["websocket_url"] .. "&type=server"
-        term.write("MCSS Channel (Nothing for Default): ")
-        local channel = read()
-        if channel == "" then channel = 1 end
-        settings["channel"] = channel
-    else
-        settings["websocket_url"] = settings["websocket_url"] .. "&type=admin"
-    end
+if settings["type"] == "mcss_server" then
+    settings["websocket_url"] = "wss://" .. getInput("API Gateway ID: ") .. ".execute-api.us-west-2.amazonaws.com/" .. getInput("API Gateway Stage: ") .."?networkid=" .. getInput("MCSS Network ID: ") .. "&type=server"
+    settings["api_key"] = getInput("MCSS Server Key: ", "*")
+    local channel = getInput("MCSS Channel (Nothing for Default): ")
+    if channel == "" then channel = 1 end
+    settings["channel"] = channel
+elseif settings["type"] == "mcss_pocket_admin" then
+    settings["websocket_url"] = "wss://" .. getInput("API Gateway ID: ") .. ".execute-api.us-west-2.amazonaws.com/" .. getInput("API Gateway Stage: ") .. "?networkid=" .. getInput("MCSS Network ID: ") .. "&type=admin"
+    settings["api_key"] = getInput("MCSS Admin Key: ", "*")
 elseif settings["type"] == "mcss_redstone_controller" then
-    term.write("MCSS Peripheral ID: ")
-    local peripheralId = read()
-    settings["id"] = peripheralId
+    settings["id"] = getInput("MCSS Peripheral ID: ")
+    settings["outputSide"] = getInput("MCSS Peripheral Output Side: ")
 
-    term.write("MCSS Peripheral Output Side: ")
-    local outputSide = read()
-    settings["outputSide"] = outputSide
-
-    term.write("MCSS Channel (Nothing for Default): ")
-    local channel = read()
+    local channel = getInput("MCSS Channel (Nothing for Default): ")
     if channel == "" then channel = 1 end
     settings["channel"] = channel
 end
