@@ -96,6 +96,15 @@ end
 local function redstoneControllers()
     if not lockdownStatus then
         mainMenu:flash("Doors")
+        local requestData = {
+            ["action"] = "listPeripherals",
+            ["filter"] = "RSCTRL",
+            ["expression_attribute_names"] = {
+                ["#n"] = "Name"
+            },
+            ["projection_expression"] = "#n, SK"
+        }
+        local controllers = websocketRequest(requestData)
         handlePaginator(doorsList)
     end
 end
