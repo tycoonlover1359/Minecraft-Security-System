@@ -48,7 +48,7 @@ local function paginate(items)
             table.insert(pages, page)
             break 
         end
-        page:add(items[count], nil, currentX, currentY, currentX + 22, currentY, colors.blue, colors.lime)
+        page:add(items[count], nil, currentX, currentY, currentX + 23, currentY, colors.blue, colors.lime)
         currentY = currentY + 2
         if count % 9 == 0 or count == #items then
             table.insert(pages, page)
