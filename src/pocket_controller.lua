@@ -105,7 +105,10 @@ local function redstoneControllers()
             ["projection_expression"] = "#n, SK"
         }
         local controllers = websocketRequest(requestData)
-        handlePaginator(doorsList)
+        print(json.encode(controllers))
+        sleep(10)
+
+         --handlePaginator(doorsList)
     end
 end
 
