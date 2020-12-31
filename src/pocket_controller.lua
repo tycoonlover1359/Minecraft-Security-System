@@ -67,7 +67,7 @@ local function paginate(items)
     return pages
 end
 
-local function handlePaginator(itemList)
+local function handlePaginator(itemList, handlerFunction)
     local menus = paginate(itemList)
     local activeMenuNumber = 1
     local run = true
@@ -84,6 +84,8 @@ local function handlePaginator(itemList)
                 activeMenuNumber = activeMenuNumber + 1
             elseif label == "<-" then
                 activeMenuNumber = activeMenuNumber - 1
+            elseif handlerFunction then
+                handlerFunction(label)
             end
         end
     end
@@ -102,10 +104,16 @@ local function redstoneControllers()
         }
         local controllers = websocketRequest(requestData)
         local controllerList = {}
+        local controllerNameMap = {}
         for _, controller in pairs(controllers) do
             table.insert(controllerList, controller["Name"])
+            controllerNameMap[controller["Name"]] = controller["SK"]
         end
-        handlePaginator(controllerList)
+        handlePaginator(controllerList, function(label) 
+            local controllerId = controllerNameMap[label]
+            print(controllerId)
+            sleep(3)
+        end)
     end
 end
 
