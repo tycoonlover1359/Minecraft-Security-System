@@ -1,4 +1,5 @@
 os.loadAPI("touchpoint.lua")
+os.loadAPI("json.lua")
 
 local lockdownStatus = false
 
@@ -7,6 +8,12 @@ local maxX = sizeX
 local maxY = sizeY - 1
 
 local mainMenu = touchpoint.new()
+
+local settings = json.decodeFromFile("settings.json")
+local websocket_url = settings["websocket_url"]
+local apiKey = settings["api_key"]
+
+local websocket = http.websocket(websocket_url, {["api_key"] = apiKey})
 
 local function paginate(items)
     local count = 1
