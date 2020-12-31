@@ -54,7 +54,7 @@ repeat
         print("Downloading MCSS Pocket Administrator Panel")
         download("pocket_controller.lua", "main.lua")
         print("Downloading Touchpoint API")
-        download("APIs/touchpoint.lua")
+        download("APIs/touchpoint.lua", "touchpoint.lua")
     else
         print("Invalid Option")
     end
