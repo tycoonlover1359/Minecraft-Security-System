@@ -13,7 +13,7 @@ local settings = json.decodeFromFile("settings.json")
 local websocket_url = settings["websocket_url"]
 local apiKey = settings["api_key"]
 
-local websocket = http.websocket(websocket_url, {["api_key"] = apiKey})
+local websocket = http.websocket(websocket_url .. "&authorization=" .. apiKey)
 
 local function paginate(items)
     local count = 1
