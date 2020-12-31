@@ -15,6 +15,11 @@ local apiKey = settings["api_key"]
 
 local websocket = http.websocket(websocket_url .. "&authorization=" .. apiKey)
 
+local function refreshWebsocket()
+    websocket.close()
+    websocket = http.websocket(websocket_url .. "&authorization=" .. apiKey)
+end
+
 local function paginate(items)
     local count = 1
     local pages = {}
