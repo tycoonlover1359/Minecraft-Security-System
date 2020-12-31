@@ -75,7 +75,7 @@ local function handlePaginator(itemList)
     end
 end
 
-local function doors()
+local function redstoneControllers()
     if not lockdownStatus then
         mainMenu:flash("Doors")
         handlePaginator(doorsList)
@@ -107,11 +107,13 @@ local function exit()
     print("Closing Websocket Conection")
     websocket.close()
     sleep(0.5)
+    term.clear()
+    term.setCursorPos(1,1)
     os.queueEvent("terminate")
     os.pullEvent("terminate")
 end
 
-mainMenu:add("Doors", doors, 2, 2, 25, 2, colors.blue, colors.lime)
+mainMenu:add("Redstone", redstoneControllers, 2, 2, 25, 2, colors.blue, colors.lime)
 mainMenu:add("Drones", drones, 2, 4, 25, 4, colors.blue, colors.lime)
 mainMenu:add("Shutdown", shutdown, 2, 14, 25, 14, colors.blue, colors.lime)
 mainMenu:add("Lockdown", lockdown, 2, 16, 25, 18, colors.blue, colors.lime)
