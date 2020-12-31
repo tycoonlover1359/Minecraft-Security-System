@@ -123,7 +123,7 @@ local Button = {
 	run = function(self)
 		while true do
 			self:draw()
-			local event = {self:handleEvents(os.pullEvent(self.side == "term" and "mouse_click" or "monitor_touch"))}
+			local event = {self:handleEvents(os.pullEventRaw(self.side == "term" and "mouse_click" or "monitor_touch"))}
 			if event[1] == "button_click" then
 				self.buttonList[event[2]].func()
 			end
