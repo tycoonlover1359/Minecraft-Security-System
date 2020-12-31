@@ -19,7 +19,7 @@ end
 
 local function modemHandler()
     while true do
-        local event, side, frequency, replyFrequency, message, distance = os.pullEvent("modem_message")
+        local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
         if message.action == "handshake" then
             print("Receiving Handshake from MCSS Client")
             local payload = {
