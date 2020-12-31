@@ -53,6 +53,8 @@ repeat
         settings["type"] = "mcss_pocket_admin"
         print("Downloading MCSS Pocket Administrator Panel")
         download("pocket_controller.lua", "main.lua")
+        print("Downloading Touchpoint API")
+        download("APIs/touchpoint.lua")
     else
         print("Invalid Option")
     end
