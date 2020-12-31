@@ -7,14 +7,14 @@ local websocket_url = settings["websocket_url"]
 local apiKey = settings["api_key"]
 
 local modem = peripheral.find("modem")
-local websocket = http.websocket(websocket_url, {["api_key"] = apiKey})
+local websocket = http.websocket(websocket_url .. "&authorization=" .. apiKey)
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
 local clientPublicKeys = {}
 
 local function refreshWebsocket()
     websocket.close()
-    websocket = http.websocket(websocket_url, {["api_key"] = apiKey})
+    websocket = http.websocket(websocket_url .. "&authorization=" .. apiKey)
 end
 
 local function modemHandler()
