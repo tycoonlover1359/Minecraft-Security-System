@@ -95,7 +95,7 @@ end
 
 local function redstoneControllers()
     if not lockdownStatus then
-        mainMenu:flash("Doors")
+        mainMenu:flash("Redstone")
         local requestData = {
             ["action"] = "listPeripherals",
             ["filter"] = "RSCTRL",
