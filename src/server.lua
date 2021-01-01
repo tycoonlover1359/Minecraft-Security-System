@@ -83,7 +83,7 @@ local function websocketHandler()
                         print("Shutting down...")
                         sleep(2.5)
                         os.shutdown()
-                    if m.action == "reboot" then
+                    elseif m.action == "reboot" then
                         print("MCSS Network Reboot Command Received")
                         print("Broadcasting Reboot Command")
                         local epoch = os.epoch("utc")
@@ -107,8 +107,8 @@ local function websocketHandler()
                             ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
                             ["timestamp"] = epoch
                         }
-                    print("Broadcasting Websocket Message: " .. json.encode(messageToTransmit))
-                    modem.transmit(channel, channel, messageToTransmit)
+                        print("Broadcasting Websocket Message: " .. json.encode(messageToTransmit))
+                        modem.transmit(channel, channel, messageToTransmit)
                     end
                 else
                     local epoch = os.epoch("utc")
