@@ -80,7 +80,7 @@ while true do
                     if os.epoch("utc") - message.timestamp < 15000 then
                         local payload = json.decode(message.payload)
                         if payload.recepient_id == id or payload.recepient_id == "all" then
-                            print(payload.action)
+                            print("Action: " .. payload.action)
                             if payload.action == "shutdown" then
                                 if not lockdownStatus then
                                     print("MCSS Client Shutdown Command Received")
