@@ -148,6 +148,9 @@ local function broadcast()
                 if response["error"] == nil then
                     print("Payload Broadcast Successful: \n" .. json.encode(response))
                     sleep(2)
+                else
+                    print("Payload Broadcast Failed: \n" .. json.encode(response))
+                    sleep(2)
                 end
             else
                 print("Payload Invalid")
