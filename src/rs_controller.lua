@@ -9,6 +9,7 @@ local outputSide = settings["outputSide"]
 local modem = peripheral.find("modem")
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
+local oldStatus = true
 local lockdownStatus = false
 local serverPublicKey = ""
 
@@ -120,11 +121,12 @@ while true do
                             elseif payload.action == "startLockdown" then
                                 print("Lockdown Command Received: Starting")
                                 lockdownStatus = true
+                                oldStatus = redstone.getOutput(outputSide)
                                 redstone.setOutput(outputSide, true)
                             elseif payload.action == "endLockdown" then
                                 print("Lockdown Command Received: Ending")
                                 lockdownStatus = false
-                                redstone.setOutput(outputSide, false)
+                                redstone.setOutput(outputSide, oldStatus)
                             end
                         end
                     else
