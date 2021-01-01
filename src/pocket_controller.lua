@@ -169,6 +169,12 @@ local function shutdown()
     end
 end
 
+local function reboot()
+    if not lockdownStatus then
+        mainMenu:flash("Reboot")
+    end
+end
+
 local function lockdown()
     lockdownStatus = not lockdownStatus
     mainMenu:toggleButton("Lockdown")
@@ -200,7 +206,8 @@ end
 mainMenu:add("Redstone", redstoneControllers, 2, 2, 25, 2, colors.blue, colors.lime)
 mainMenu:add("Drones", drones, 2, 4, 25, 4, colors.blue, colors.lime)
 mainMenu:add("Broadcast", broadcast, 2, 12, 25, 12, colors.blue, colors.lime)
-mainMenu:add("Shutdown", shutdown, 2, 14, 25, 14, colors.blue, colors.lime)
+mainMenu:add("Shutdown", shutdown, 2, 14, 12, 14, colors.blue, colors.lime)
+mainMenu:add("Reboot", reboot, 15, 14, 25, 14, colors.blue, colors.lime)
 mainMenu:add("Lockdown", lockdown, 2, 16, 25, 18, colors.blue, colors.lime)
 mainMenu:add("Exit", exit, 11, sizeY, 16, sizeY, colors.blue, colors.lime)
 
