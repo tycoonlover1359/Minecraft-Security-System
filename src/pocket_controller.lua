@@ -127,15 +127,16 @@ end
 local function broadcast()
     if not lockdownStatus then
         mainMenu:flash("Broadcast")
+        term.setBackgroundColor(colors.black)
         term.clear()
         term.setCursorPos(1,1)
         print("Enter Valid JSON Payload:")
         print("")
         local input = read()
         local success = pcall(function() json.decode(input) end)
+        term.clear()
+        term.setCursorPos(1,1)
         if success then
-            term.clear()
-            term.setCursorPos(1,1)
             print("Broadcasting Payload...")
             local payload = {
                 ["action"] = "broadcastMessage",
@@ -146,6 +147,9 @@ local function broadcast()
                 print("Payload Broadcast Successful")
                 sleep(1)
             end
+        else
+            print("Payload Invalid")
+            sleep(1)
         end
     end
 end
