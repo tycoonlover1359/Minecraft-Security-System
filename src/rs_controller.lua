@@ -117,9 +117,11 @@ while true do
                                     redstone.setOutput(outputSide, true)
                                 end
                             elseif payload.action == "startLockdown" then
+                                print("Lockdown Command Received: Starting")
                                 lockdownStatus = true
                                 redstone.setOutput(outputSide, true)
                             elseif payload.action == "endLockdown" then
+                                print("Lockdown Command Received: Ending")
                                 lockdownStatus = false
                                 redstone.setOutput(outputSide, false)
                             end
