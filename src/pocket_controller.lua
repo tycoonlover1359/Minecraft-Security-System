@@ -2,6 +2,7 @@ os.loadAPI("touchpoint.lua")
 os.loadAPI("json.lua")
 
 local lockdownStatus = false
+local caache = {}
 
 local sizeX, sizeY = term.getSize()
 local maxX = sizeX
@@ -100,7 +101,8 @@ local function redstoneControllers()
             ["filter"] = "RSCTRL",
             ["projection_expression"] = "SK, Label"
         }
-        local controllers = websocketRequest(requestData)
+        local controllers = cache["controllers"] or websocketRequest(requestData)
+        if not cache["controllers"] then cache["controllers"] = controllers end
         if not controllers["error"] then
             local controllerList = {}
             local controllerLabelMap = {}
