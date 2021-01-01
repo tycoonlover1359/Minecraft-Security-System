@@ -5,7 +5,7 @@ local lockdownStatus = false
 
 local sizeX, sizeY = term.getSize()
 local maxX = sizeX
-local maxY = sizeY - 1
+local maxY = sizeY - 2
 
 local mainMenu = touchpoint.new()
 
@@ -30,9 +30,10 @@ local function websocketRequest(data, tries)
     if success then 
         return json.decode(response)
     elseif tries < 3 then
+        tries = tries + 1
         refreshWebsocket()
         sleep(math.random() * 3)
-        websocketRequest(data)
+        websocketRequest(data, tries)
     else
         return nil
     end
@@ -50,7 +51,7 @@ local function paginate(items)
         end
         page:add(items[count], nil, currentX, currentY, currentX + 23, currentY, colors.blue, colors.lime)
         currentY = currentY + 2
-        if count % 9 == 0 or count == #items then
+        if currentY >= maxY or count == #items then
             table.insert(pages, page)
             page = touchpoint.new()
             currentY = 2
