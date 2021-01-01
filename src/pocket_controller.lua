@@ -111,9 +111,13 @@ local function redstoneControllers()
             handlePaginator(controllerList, function(label) 
                 local controllerId = controllerLabelMap[label]
                 local requestData = {
-                    ["action"] = "togglePeripheral",
-                    ["peripheral_id"] = controllerId
+                    ["action"] = "broadcastMessage",
+                    ["payload"] = {
+                        ["action"] = "toggleStatus",
+                        ["target"] = controllerId
+                    }
                 }
+                websocketRequest(requestData)
             end)
         end
     end
