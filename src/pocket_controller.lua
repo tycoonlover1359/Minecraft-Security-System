@@ -144,9 +144,9 @@ local function broadcast()
                     ["action"] = "broadcastMessage",
                     ["payload"] = input
                 }
-                local response = websocketRequest(payload)
+                local response = json.decode(websocketRequest(payload))
                 if not response["error"] then
-                    print("Payload Broadcast Successful")
+                    print("Payload Broadcast Successful: ")
                     sleep(2)
                 end
             else
