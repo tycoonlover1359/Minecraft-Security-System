@@ -166,12 +166,28 @@ end
 local function shutdown()
     if not lockdownStatus then
         mainMenu:flash("Shutdown")
+        local payload = {
+            ["action"] = "broadcastMessage",
+            ["payload"] = {
+                ["action"] = "shutdown",
+                ["target"] = "all"
+            }
+        }
+        websocketRequest(payload)
     end
 end
 
 local function reboot()
     if not lockdownStatus then
         mainMenu:flash("Reboot")
+        local payload = {
+            ["action"] = "broadcastMessage",
+            ["payload"] = {
+                ["action"] = "reboot",
+                ["target"] = "all"
+            }
+        }
+        websocketRequest(payload)
     end
 end
 
@@ -190,7 +206,7 @@ local function lockdown()
             ["target"] = "all"
         })
     end
-    local response = websocketRequest(payload)
+    websocketRequest(payload)
 end
 
 local function exit()
