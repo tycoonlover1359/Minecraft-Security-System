@@ -97,23 +97,24 @@ local function redstoneControllers()
         local requestData = {
             ["action"] = "listPeripherals",
             ["filter"] = "RSCTRL",
-            ["expression_attribute_names"] = {
-                ["#n"] = "Name"
-            },
-            ["projection_expression"] = "#n, SK"
+            ["projection_expression"] = "SK, Label"
         }
         local controllers = websocketRequest(requestData)
-        local controllerList = {}
-        local controllerNameMap = {}
-        for _, controller in pairs(controllers) do
-            table.insert(controllerList, controller["Name"])
-            controllerNameMap[controller["Name"]] = controller["SK"]
+        if not controllers["error"] then
+            local controllerList = {}
+            local controllerLabelMap = {}
+            for _, controller in pairs(controllers) do
+                table.insert(controllerList, controller["Label"])
+                controllerLabelMap[controller["Label"]] = controller["SK"]
+            end
+            handlePaginator(controllerList, function(label) 
+                local controllerId = controllerLabelMap[label]
+                local requestData = {
+                    ["action"] = "togglePeripheral",
+                    ["peripheral_id"] = controllerId
+                }
+            end)
         end
-        handlePaginator(controllerList, function(label) 
-            local controllerId = controllerNameMap[label]
-            print(controllerId)
-            sleep(3)
-        end)
     end
 end
 
