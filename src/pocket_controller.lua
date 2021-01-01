@@ -145,7 +145,7 @@ local function broadcast()
                     ["payload"] = input
                 }
                 local response = websocketRequest(payload)
-                if not response["error"] then
+                if response["error"] == nil then
                     print("Payload Broadcast Successful: \n" .. json.encode(response))
                     sleep(2)
                 end
