@@ -92,6 +92,8 @@ while true do
                                 elseif payload.redstoneStatus == "false" or payload.redstoneStatus == false then
                                     redstone.setOutput(outputSide, false)
                                 end
+                            elseif payload.action == "toggleStatus" then
+                                redstone.setOutput(outputSide, not redstone.getOutput(outputSide))
                             elseif payload.action == "tempOpen" then
                                 redstone.setOutput(outputSide, false)
                                 sleep(payload.openTime)
