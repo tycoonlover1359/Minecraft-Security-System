@@ -2,7 +2,7 @@ os.loadAPI("touchpoint.lua")
 os.loadAPI("json.lua")
 
 local lockdownStatus = false
-local caache = {}
+local cache = {}
 
 local sizeX, sizeY = term.getSize()
 local maxX = sizeX
