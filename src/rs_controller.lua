@@ -9,6 +9,7 @@ local outputSide = settings["outputSide"]
 local modem = peripheral.find("modem")
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
+local lockdownStatus = false
 local serverPublicKey = ""
 
 modem.open(channel)
@@ -80,24 +81,47 @@ while true do
                         local payload = json.decode(message.payload)
                         if payload.recepient_id == id or payload.recepient_id == "all" then
                             if payload.action == "shutdown" then
-                                print("MCSS Client Shutdown Command Received")
-                                print("Closing Modem Connection")
-                                modem.closeAll()
-                                print("Shutting Down...")
-                                sleep(3)
-                                os.shutdown()
+                                if not lockdownStatus then
+                                    print("MCSS Client Shutdown Command Received")
+                                    print("Closing Modem Connection")
+                                    modem.closeAll()
+                                    print("Shutting Down...")
+                                    sleep(3)
+                                    os.shutdown()
+                                end
+                            elseif payload.action == "reboot" then
+                                if not lockdownStatus then
+                                    print("MCSS Client Reboot Command Received")
+                                    print("Closing Modem Connection")
+                                    modem.closeAll()
+                                    print("Rebooting...")
+                                    sleep(3)
+                                    os.reboot()
+                                end
                             elseif payload.action == "redstoneUpdate" then
-                                if payload.redstoneStatus == "true" or payload.redstoneStatus == true then
-                                    redstone.setOutput(outputSide, true)
-                                elseif payload.redstoneStatus == "false" or payload.redstoneStatus == false then
-                                    redstone.setOutput(outputSide, false)
+                                if not lockdownStatus then
+                                    if payload.redstoneStatus == "true" or payload.redstoneStatus == true then
+                                        redstone.setOutput(outputSide, true)
+                                    elseif payload.redstoneStatus == "false" or payload.redstoneStatus == false then
+                                        redstone.setOutput(outputSide, false)
+                                    end
                                 end
                             elseif payload.action == "toggleStatus" then
-                                redstone.setOutput(outputSide, not redstone.getOutput(outputSide))
+                                if not lockdownStatus then
+                                    redstone.setOutput(outputSide, not redstone.getOutput(outputSide))
+                                end
                             elseif payload.action == "tempOpen" then
-                                redstone.setOutput(outputSide, false)
-                                sleep(payload.openTime)
+                                if not lockdownStatus then
+                                    redstone.setOutput(outputSide, false)
+                                    sleep(payload.openTime)
+                                    redstone.setOutput(outputSide, true)
+                                end
+                            elseif payload.action == "startLockdown" then
+                                lockdownStatus = true
                                 redstone.setOutput(outputSide, true)
+                            elseif payload.action == "endLockdown" then
+                                lockdownStatus = false
+                                redstone.setOutput(outputSide, false)
                             end
                         end
                     else

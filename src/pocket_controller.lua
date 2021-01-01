@@ -172,6 +172,19 @@ end
 local function lockdown()
     lockdownStatus = not lockdownStatus
     mainMenu:toggleButton("Lockdown")
+    local payload = {["action"] = "broadcastMessage"}
+    if lockdownStatus then
+        payload["payload"] = json.encode({
+            ["action"] = "startLockdown",
+            ["target"] = "all"
+        })
+    else
+        payload["payload"] = json.encode({
+            ["action"] = "endLockdown",
+            ["target"] = "all"
+        })
+    end
+    local response = websocketRequest(payload)
 end
 
 local function exit()
