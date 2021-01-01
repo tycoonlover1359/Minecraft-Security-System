@@ -127,12 +127,6 @@ end
 local function broadcast()
     if not lockdownStatus then
         mainMenu:flash("Broadcast")
-    end
-end
-
-local function shutdown()
-    if not lockdownStatus then
-        mainMenu:flash("Shutdown")
         term.clear()
         term.setCursorPos(1,1)
         print("Enter Valid JSON Payload:")
@@ -153,6 +147,12 @@ local function shutdown()
                 sleep(1)
             end
         end
+    end
+end
+
+local function shutdown()
+    if not lockdownStatus then
+        mainMenu:flash("Shutdown")
     end
 end
 
