@@ -54,7 +54,7 @@ local function websocketHandler()
             if message then
                 print("Websocket Message Received: \n" .. message)
                 local m = json.decode(message)
-                if m.recepient_id == "server" then
+                if m.target == "server" then
                     if m.action == "shutdown" then
                         print("MCSS Server Shutdown Command Received")
                         print("Closing Modem Connection")
@@ -65,7 +65,7 @@ local function websocketHandler()
                         sleep(2.5)
                         os.shutdown()
                     end
-                elseif m.recepient_id == "all" then
+                elseif m.target == "all" then
                     if m.action == "shutdown" then
                         print("MCSS Network Shutdown Command Received")
                         print("Broadcasting Shutdown Command")
