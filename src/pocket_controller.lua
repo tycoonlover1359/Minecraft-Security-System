@@ -133,6 +133,26 @@ end
 local function shutdown()
     if not lockdownStatus then
         mainMenu:flash("Shutdown")
+        term.clear()
+        term.setCursorPos(1,1)
+        print("Enter Valid JSON Payload:")
+        print("")
+        local input = read()
+        local success = pcall(function() json.decode(input) end)
+        if success then
+            term.clear()
+            term.setCursorPos(1,1)
+            print("Broadcasting Payload...")
+            local payload = {
+                ["action"] = "broadcastMessage",
+                ["payload"] = input
+            }
+            local response = websocketRequest(payload)
+            if not response["error"] then
+                print("Payload Broadcast Successful")
+                sleep(1)
+            end
+        end
     end
 end
 
