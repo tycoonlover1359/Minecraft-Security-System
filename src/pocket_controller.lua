@@ -146,15 +146,15 @@ local function broadcast()
                 local response = websocketRequest(payload)
                 if not response["error"] then
                     print("Payload Broadcast Successful")
-                    sleep(1)
+                    sleep(2)
                 end
             else
                 print("Payload Invalid")
-                sleep(1)
+                sleep(2)
             end
         else
             print("Exiting...")
-            sleep(1)
+            sleep(2)
         end
     end
 end
