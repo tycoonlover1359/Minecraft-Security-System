@@ -80,6 +80,7 @@ while true do
                     print(os.epoch("utc") - message.timestamp)
                     if os.epoch("utc") - message.timestamp < 15000 then
                         local payload = json.decode(message.payload)
+                        print("Target: " .. payload.target)
                         if payload.target == id or payload.target == "all" then
                             print("Action: " .. payload.action)
                             if payload.action == "shutdown" then
