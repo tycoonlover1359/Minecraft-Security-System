@@ -83,6 +83,23 @@ local function websocketHandler()
                         print("Shutting down...")
                         sleep(2.5)
                         os.shutdown()
+                    if m.action == "reboot" then
+                        print("MCSS Network Reboot Command Received")
+                        print("Broadcasting Reboot Command")
+                        local epoch = os.epoch("utc")
+                        local messageToTransmit = {
+                            ["payload"] = message,
+                            ["payload_signature"] = ecc.sign(secretKey, message .. epoch),
+                            ["timestamp"] = epoch
+                        }
+                        modem.transmit(channel, channel, messageToTransmit)
+                        print("Closing Modem Connection")
+                        modem.closeAll()
+                        print("Closing Websocket Conection")
+                        websocket.close()
+                        print("Rebooting...")
+                        sleep(2.5)
+                        os.reboot()
                     else
                         local epoch = os.epoch("utc")
                         local messageToTransmit = {
