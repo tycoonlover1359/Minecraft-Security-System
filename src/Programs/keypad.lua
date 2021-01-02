@@ -119,7 +119,7 @@ local function keypadHandler()
                 }
                 signedPayload = {
                     ["payload"] = json.encode(payload),
-                    ["payload_signature"] = ecc.sign(secretKey, json.encode(payload) .. timestamp)
+                    ["payload_signature"] = ecc.sign(secretKey, json.encode(payload) .. timestamp),
                     ["timestamp"] = timestamp
                 }
                 modem.transmit(channel, channel, signedPayload)
