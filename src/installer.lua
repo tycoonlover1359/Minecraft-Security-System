@@ -46,17 +46,17 @@ repeat
         success = true
         settings["type"] = "mcss_server"
         print("Downloading MCSS Server")
-        download("server.lua", "main.lua")
+        download("Programs/server.lua", "main.lua")
     elseif input == "2" then 
         success = true
         settings["type"] = "mcss_redstone_controller"
         print("Downloading MCSS Redstone Controller")
-        download("rs_controller.lua", "main.lua")
+        download("Programs/rs_controller.lua", "main.lua")
     elseif input == "3" then
         success = true
         settings["type"] = "mcss_pocket_admin"
         print("Downloading MCSS Pocket Administrator Panel")
-        download("pocket_controller.lua", "main.lua")
+        download("Programs/pocket_controller.lua", "main.lua")
         print("Downloading Touchpoint API")
         download("APIs/touchpoint.lua", "touchpoint.lua")
     else
