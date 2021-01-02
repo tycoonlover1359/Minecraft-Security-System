@@ -40,12 +40,18 @@ local function exit()
     exitButton:flash("Exit")
 end
 
-local function button()
-    keypad:flash("1")
+local function keypadHandler()
+    while true do
+        local event = { keypad:handleEvents(os.pullEvent()) }
+        if event[1] == "button_click" then
+            local label = event[2]
+            keypad:flash(label)
+        end
+    end
 end
 
 exitButton:add("Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
 
-keypad:add("1", button, 1, 1, 1, 1, colors.red, colors.lime)
+keypad:add("1", nil, 1, 1, 1, 1, colors.red, colors.lime)
 
-parallel.waitForAny(function() exitButton:run() end, function() keypad:run() end)
+parallel.waitForAny(function() exitButton:run() end, keypadHandler)
