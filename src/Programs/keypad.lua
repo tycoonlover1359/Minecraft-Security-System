@@ -195,5 +195,5 @@ parallel.waitForAny(
     end, 
     keypadHandler, 
     modemHandler,
-    keypadHandler
+    keycardHandler
 )
