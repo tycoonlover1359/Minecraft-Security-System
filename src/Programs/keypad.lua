@@ -126,6 +126,7 @@ local function keypadHandler()
                 }
                 print(json.encode(signedPayload))
                 modem.transmit(channel, channel, signedPayload)
+                inputCode = ""
             end
         end
     end
