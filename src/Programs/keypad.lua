@@ -36,7 +36,7 @@ keypadMonitorSize["X"], keypadMonitorSize["Y"] = keypadMonitor.getSize()
 local exitButtonSize = {}
 exitButtonSize["X"], exitButtonSize["Y"] = exitButtonMonitor.getSize()
 
-local funcion exit()
+local function exit()
     exitButton:flash("Exit")
 end
 
