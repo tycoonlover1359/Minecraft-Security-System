@@ -29,9 +29,6 @@ local function modemHandler()
             modem.transmit(1, 1, payload)
             clientPublicKeys[message.id] = message.public_key
         else
-            print(clientPublicKeys[message.id])
-            print(message.payload .. message.timestamp)
-            print(json.encode(messag.payload_signature))
             if ecc.verify(clientPublicKeys[message.id], message.payload .. message.timestamp, message.payload_signature) then
                 local maxTries = 3
                 local tries = 0
