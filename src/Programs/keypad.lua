@@ -4,7 +4,10 @@ os.loadAPI("json.lua")
 local settings = json.decodeFromFile("settings.json")
 local monitorSide = settings["keypad_monitor_side"]
 local exitButtonSide = settings["exit_button_side"]
+
 local reboot = false
+local inputCode = ""
+
 
 if not monitorSide then
     reboot = true
@@ -46,10 +49,16 @@ end
 local function keypadHandler()
     while true do
         keypad:draw()
-        local event = { keypad:handleEvents(os.pullEventRaw()) }
+        local event = { keypad:handleEvents(os.pullEvent()) }
         if event[1] == "button_click" then
             local label = event[2]
             keypad:flash(label)
+            if tonumber(label) then
+                inputCode = inputCode .. label
+            elseif label == "R" then
+                inputCode = ""
+            elseif label == ">" then
+            end
         end
     end
 end
