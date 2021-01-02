@@ -42,6 +42,7 @@ end
 
 local function keypadHandler()
     while true do
+        keypad:draw()
         local event = { keypad:handleEvents(os.pullEventRaw()) }
         if event[1] == "button_click" then
             local label = event[2]
