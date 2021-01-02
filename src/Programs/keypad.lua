@@ -9,6 +9,7 @@ local channel = settings["channel"]
 local id = settings["id"]
 
 local secretKey, publicKey = ecc.keypair(ecc.random.random())
+local serverPublicKey = ""
 
 local reboot = false
 local inputCode = ""
@@ -173,6 +174,29 @@ local function modemHandler()
         if message == "rhs" then
             handshake()
             checkServerPublicKey()
+        else
+            local toVerify = message.payload .. message.timestamp
+            if ecc.verify(serverPublicKey, toVerify, message.payload_signature) then
+                if os.epoch("utc") - message.timestamp < 15000 then
+                    if payload.target == id or payload.target == "all" then
+                        if payload.action == "shutdown" then
+                            print("MCSS Client Shutdown Command Received")
+                            print("Closing Modem Connection")
+                            modem.closeAll()
+                            print("Shutting Down...")
+                            sleep(3)
+                            os.shutdown()
+                        elseif action == "reboot" then
+                            print("MCSS Client Reboot Command Received")
+                            print("Closing Modem Connection")
+                            modem.closeAll()
+                            print("Rebooting...")
+                            sleep(3)
+                            os.reboot()
+                        end
+                    end
+                end
+            end
         end
     end
 end
