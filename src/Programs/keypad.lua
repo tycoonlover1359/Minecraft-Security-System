@@ -24,3 +24,21 @@ if reboot then
     file.close()
     os.reboot() 
 end
+
+local keypad = touchpoint.new(monitorSide)
+local keypadMonitor = peripheral.wrap(monitorSide)
+local exitButton = touchpoint.new(exitButtonSide)
+local exitButtonMonitor = peripheral.wrap(exitButtonSide)
+
+local keypadMonitorSize = {}
+keypadMonitorSize["X"], keypadMonitorSize["Y"] = keypadMonitor.getSize()
+
+local exitButtonSize = {}
+exitButtonSize["X"], exitButtonSize["Y"] = exitButtonMonitor.getSize()
+
+local funcion exit()
+    exitButton:flash("Exit")
+end
+
+exitButton:add("Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
+exitButton:run()
