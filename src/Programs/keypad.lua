@@ -4,10 +4,17 @@ os.loadAPI("json.lua")
 local settings = json.decodeFromFile("settings.json")
 local monitorSide = settings["keypad_monitor_side"]
 local exitButtonSide = settings["exit_button_side"]
+local channel = settings["channel"]
 
 local reboot = false
 local inputCode = ""
-
+local modem = peripheral.find("modem", function(name, handle)
+    if #handle.getNamesRemote() == 0 then
+        return true
+    else
+        return false
+    end
+end)
 
 if not monitorSide then
     reboot = true
@@ -58,6 +65,11 @@ local function keypadHandler()
             elseif label == "R" then
                 inputCode = ""
             elseif label == ">" then
+                payload = {
+                    ["action"] = "checkCode",
+                    ["code"] = inputCode
+                }
+                modem.transmit(channel, channel, )
             end
         end
     end
