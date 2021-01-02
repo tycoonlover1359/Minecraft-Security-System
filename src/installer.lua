@@ -42,6 +42,7 @@ repeat
     print("[1] MCSS Server")
     print("[2] MCSS Redstone Controller")
     print("[3] MCSS Pocket Admin Panel")
+    print("[4] MCSS Keypad")
     print(" ")
     local input = getInput("Enter Type Number: ")
 
@@ -58,10 +59,17 @@ repeat
     elseif input == "3" then
         success = true
         settings["type"] = "mcss_pocket_admin"
-        print("Downloading MCSS Pocket Administrator Panel")
-        download("Programs/pocket_controller.lua", "main.lua")
         print("Downloading Touchpoint API")
         download("APIs/touchpoint.lua", "touchpoint.lua")
+        print("Downloading MCSS Pocket Administrator Panel")
+        download("Programs/pocket_controller.lua", "main.lua")
+    elseif input == "4" then
+        success = true
+        settings["type"] = "mcss_keypad"
+        print("Downloading Touchpoint API")
+        download("APIs/touchpoint.lua", "touchpoint.lua")
+        print("Downloading MCSS Keypad")
+        download("Programs/keypad.lua", "main.lua")
     else
         print("Invalid Option")
     end
@@ -83,7 +91,11 @@ elseif settings["type"] == "mcss_pocket_admin" then
 elseif settings["type"] == "mcss_redstone_controller" then
     settings["id"] = getInput("MCSS Peripheral ID: ")
     settings["outputSide"] = getInput("MCSS Peripheral Output Side: ")
-
+    local channel = getInput("MCSS Channel (Nothing for Default): ")
+    if channel == "" then channel = 1 end
+    settings["channel"] = channel
+elseif settings["type"] == "mcss_keypad" then
+    settings["id"] = getInput("MCSS Peripheral ID: ")
     local channel = getInput("MCSS Channel (Nothing for Default): ")
     if channel == "" then channel = 1 end
     settings["channel"] = channel
