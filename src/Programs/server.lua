@@ -27,6 +27,8 @@ local function modemHandler()
                 ["id"] = "server"
             }
             modem.transmit(1, 1, payload)
+            print(message.id)
+            print(message.public_key)
             clientPublicKeys[message.id] = message.public_key
         else
             if ecc.verify(clientPublicKeys[message.id], message.payload .. message.timestamp, message.payload_signature) then
