@@ -180,6 +180,9 @@ local function modemHandler()
                 if os.epoch("utc") - message.timestamp < 15000 then
                     if payload.target == id or payload.target == "all" then
                         if payload.action == "shutdown" then
+                            exitButtonMonitor.clear()
+                            keypadMonitor.clear()
+                            disk.ejectDisk()
                             print("MCSS Client Shutdown Command Received")
                             print("Closing Modem Connection")
                             modem.closeAll()
@@ -187,6 +190,9 @@ local function modemHandler()
                             sleep(3)
                             os.shutdown()
                         elseif action == "reboot" then
+                            exitButtonMonitor.clear()
+                            keypadMonitor.clear()
+                            disk.ejectDisk()
                             print("MCSS Client Reboot Command Received")
                             print("Closing Modem Connection")
                             modem.closeAll()
