@@ -123,6 +123,7 @@ local function keypadHandler()
                     ["payload_signature"] = ecc.sign(secretKey, json.encode(payload) .. timestamp),
                     ["timestamp"] = timestamp
                 }
+                print(json.encode(signedPayload))
                 modem.transmit(channel, channel, signedPayload)
             end
         end
@@ -159,4 +160,4 @@ modem.open(channel)
 handshake()
 checkServerPublicKey()
 
-parallel.waitForAny(function() exitButton:run() end, keypadHandler)
+parallel.waitForAny(function() exitButton:run() end, keypadHandler, modemHandler)
