@@ -20,7 +20,7 @@ end
 
 if reboot then 
     local file = fs.open("settings.json", "w")
-    file.write(json.encode(file))
+    file.write(json.encode(settings))
     file.close()
     os.reboot() 
 end
