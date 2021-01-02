@@ -16,6 +16,9 @@ end
 term.clear()
 term.setCursorPos(1,1)
 
+print("Downloading Startup File")
+download("startup.lua", "startup.lua")
+
 print("Downloading Autoupdater")
 download("autoupdater.lua", "autoupdater.lua")
 
@@ -96,11 +99,6 @@ local file = fs.open("settings.json", "w")
 file.write(json.encode(settings))
 file.close()
 sleep(1)
-
-print("Saving Startup File")
-local file = fs.open("startup.lua", "w")
-file.write([[shell.run("autoupdater.lua")]])
-file.close()
 
 term.clear()
 term.setCursorPos(1,1)
