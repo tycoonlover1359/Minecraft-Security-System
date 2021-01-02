@@ -8,6 +8,9 @@ local function download(urlPath, filePath)
     request.close()
 end
 
+print("Updating startup script")
+download("startup.lua", "startup.lua")
+
 print("Updating the main program")
 os.loadAPI("json.lua")
 local settings = json.decodeFromFile("settings.json")
