@@ -30,6 +30,9 @@ local keypadMonitor = peripheral.wrap(monitorSide)
 local exitButton = touchpoint.new(exitButtonSide)
 local exitButtonMonitor = peripheral.wrap(exitButtonSide)
 
+keypadMonitor.setTextScale(1)
+exitButtonMonitor.setTextScale(1)
+
 local keypadMonitorSize = {}
 keypadMonitorSize["X"], keypadMonitorSize["Y"] = keypadMonitor.getSize()
 
@@ -53,14 +56,17 @@ end
 
 exitButton:add("Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
 
-keypad:add("1", nil, 1, 1, 1, 1, colors.red, colors.lime)
-keypad:add("2", nil, 4, 1, 4, 1, colors.red, colors.lime)
-keypad:add("3", nil, 7, 1, 7, 1, colors.red, colors.lime)
-keypad:add("4", nil, 1, 2, 1, 2, colors.red, colors.lime)
-keypad:add("5", nil, 4, 2, 4, 2, colors.red, colors.lime)
-keypad:add("6", nil, 7, 2, 7, 2, colors.red, colors.lime)
-keypad:add("7", nil, 1, 3, 1, 3, colors.red, colors.lime)
-keypad:add("8", nil, 4, 3, 4, 3, colors.red, colors.lime)
-keypad:add("9", nil, 7, 3, 7, 3, colors.red, colors.lime)
+keypad:add("1", nil, 1, 1, 1, 1, colors.black, colors.orange)
+keypad:add("2", nil, 3, 1, 3, 1, colors.black, colors.orange)
+keypad:add("3", nil, 5, 1, 5, 1, colors.black, colors.orange)
+keypad:add("4", nil, 1, 3, 1, 3, colors.black, colors.orange)
+keypad:add("5", nil, 3, 3, 3, 3, colors.black, colors.orange)
+keypad:add("6", nil, 5, 3, 5, 3, colors.black, colors.orange)
+keypad:add("7", nil, 1, 5, 1, 5, colors.black, colors.orange)
+keypad:add("8", nil, 3, 5, 3, 5, colors.black, colors.orange)
+keypad:add("9", nil, 5, 5, 5, 5, colors.black, colors.orange)
+keypad:add("0", nil, 7, 3, 7, 3, colors.black, colors.orange)
+keypad:add(">", nil, 7, 5, 7, 5, colors.red, colors.orange)
+keypad:add("R", nil, 7, 1, 7, 1, colors.red, colors.orange)
 
 parallel.waitForAny(function() exitButton:run() end, keypadHandler)
