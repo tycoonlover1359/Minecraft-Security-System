@@ -60,6 +60,7 @@ local function handshake()
         payload.action = "handshake"
         payload.public_key = publicKey
         payload.id = id
+        print(json.encode(payload))
         modem.transmit(channel, channel, payload)
         local timer = os.startTimer(5)
         local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw()
