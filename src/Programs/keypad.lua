@@ -1,10 +1,13 @@
 os.loadAPI("touchpoint.lua")
 os.loadAPI("json.lua")
+local ecc = require("ecc")
 
 local settings = json.decodeFromFile("settings.json")
 local monitorSide = settings["keypad_monitor_side"]
 local exitButtonSide = settings["exit_button_side"]
 local channel = settings["channel"]
+
+local secretKey, publicKey = ecc.keypair(ecc.random.random())
 
 local reboot = false
 local inputCode = ""
@@ -49,6 +52,50 @@ keypadMonitorSize["X"], keypadMonitorSize["Y"] = keypadMonitor.getSize()
 local exitButtonSize = {}
 exitButtonSize["X"], exitButtonSize["Y"] = exitButtonMonitor.getSize()
 
+local function handshake()
+    local success = false
+    repeat
+        print("Initiating Handshake with MCSS Server")
+        local payload = {}
+        payload.action = "handshake"
+        payload.public_key = publicKey
+        payload.id = id
+        modem.transmit(channel, channel, payload)
+        local timer = os.startTimer(5)
+        local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw()
+        if event == "modem_message" then
+            if type(message) == "table" then
+                if message.id ~= nil and message.id == "server" then
+                    success = true
+                    os.cancelTimer(timer)
+                    print("Handshake with MCSS Server successful")
+                    serverPublicKey = message.public_key
+                else
+                    print("Handshake with MCSS Server Failed")
+                end
+            else
+                print("Handshake with MCSS Server Failed")
+            end
+        elseif event == "timer" then
+            os.cancelTimer(timer)
+            print("Handshake with MCSS Server Timed Out")
+        end
+        os.cancelTimer(timer)
+        sleep(1 + math.random() * 3)
+    until success
+end
+
+local function checkServerPublicKey()
+    repeat
+        if type(serverPublicKey) ~= "table" then
+            print("Invalid Server Public Key")
+            print("Rehandshaking with Server")
+            serverPublicKey = ""
+            handshake()
+        end
+    until type(serverPublicKey) == "table"
+end
+
 local function exit()
     exitButton:flash("Exit")
 end
@@ -65,12 +112,28 @@ local function keypadHandler()
             elseif label == "R" then
                 inputCode = ""
             elseif label == ">" then
+                local timestamp = os.epoch("utc")
                 payload = {
                     ["action"] = "checkCode",
                     ["code"] = inputCode
                 }
-                modem.transmit(channel, channel, )
+                signedPayload = {
+                    ["payload"] = json.encode(payload),
+                    ["payload_signature"] = ecc.sign(secretKey, json.encode(payload) .. timestamp)
+                    ["timestamp"] = timestamp
+                }
+                modem.transmit(channel, channel, signedPayload)
             end
+        end
+    end
+end
+
+local function modemHandler()
+    while true do
+        local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
+        if message == "rhs" then
+            handshake()
+            checkServerPublicKey()
         end
     end
 end
@@ -89,5 +152,8 @@ keypad:add("9", nil, 5, 5, 5, 5, colors.black, colors.orange)
 keypad:add("0", nil, 7, 3, 7, 3, colors.black, colors.orange)
 keypad:add(">", nil, 7, 5, 7, 5, colors.red, colors.orange)
 keypad:add("R", nil, 7, 1, 7, 1, colors.red, colors.orange)
+
+handshake()
+checkServerPublicKey()
 
 parallel.waitForAny(function() exitButton:run() end, keypadHandler)
