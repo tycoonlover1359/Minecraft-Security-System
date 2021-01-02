@@ -19,6 +19,7 @@ local modem = peripheral.find("modem", function(name, handle)
         return false
     end
 end)
+local disk = peripheral.find("drive")
 
 if not monitorSide then
     reboot = true
@@ -52,6 +53,18 @@ keypadMonitorSize["X"], keypadMonitorSize["Y"] = keypadMonitor.getSize()
 
 local exitButtonSize = {}
 exitButtonSize["X"], exitButtonSize["Y"] = exitButtonMonitor.getSize()
+
+local function signPayload(payload)
+    if type(payload) ~= "string" then payload = json.encode(payload) end
+    local timestamp = os.epoch("utc")
+    local signedPayload = {
+        ["payload"] = payload,
+        ["payload_signature"] = ecc.sign(secretKey, payload .. timestamp),
+        ["timestamp"] = timestamp,
+        ["id"] = id
+    }
+    return signedPayload
+end
 
 local function handshake()
     local success = false
@@ -116,16 +129,10 @@ local function keypadHandler()
                 local timestamp = os.epoch("utc")
                 payload = {
                     ["action"] = "checkCode",
-                    ["code"] = inputCode
+                    ["code"] = inputCode,
+                    ["client_id"] = id
                 }
-                signedPayload = {
-                    ["payload"] = json.encode(payload),
-                    ["payload_signature"] = ecc.sign(secretKey, json.encode(payload) .. timestamp),
-                    ["timestamp"] = timestamp,
-                    ["id"] = id
-                }
-                print(json.encode(signedPayload))
-                modem.transmit(channel, channel, signedPayload)
+                modem.transmit(channel, channel, signPayload(payload))
                 inputCode = ""
             end
         end
@@ -139,6 +146,26 @@ local function modemHandler()
             handshake()
             checkServerPublicKey()
         end
+    end
+end
+
+local function keycardHandler()
+    while true do
+        local event, side = os.pullEventRaw("disk")
+        local file = fs.open("disk/id.json", "r")
+        if file then
+            local text = file.readAll()
+            file.close()
+            local data = json.decode(text)
+            local keycardId = data["keycard_id"]
+            local payload = {
+                ["action"] = "checkKeycard",
+                ["keycard_id"] = keycardId,
+                ["client_id"] = id
+            }
+            modem.transmit(channel, channel, signPayload(payload))
+        end
+        disk.ejectDisk()
     end
 end
 
@@ -162,4 +189,9 @@ modem.open(channel)
 handshake()
 checkServerPublicKey()
 
-parallel.waitForAny(function() exitButton:run() end, keypadHandler, modemHandler)
+parallel.waitForAny(
+    function() 
+        exitButton:run() 
+    end, 
+    keypadHandler, 
+    modemHandler)
