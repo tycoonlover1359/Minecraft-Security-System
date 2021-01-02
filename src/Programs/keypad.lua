@@ -152,8 +152,10 @@ end
 local function keycardHandler()
     while true do
         local event, side = os.pullEventRaw("disk")
+        print("Disk event received; reading disk")
         local file = fs.open("disk/id.json", "r")
         if file then
+            print("transmitting keycard id")
             local text = file.readAll()
             file.close()
             local data = json.decode(text)
@@ -165,6 +167,7 @@ local function keycardHandler()
             }
             modem.transmit(channel, channel, signPayload(payload))
         end
+        print("Ejecting disk")
         disk.ejectDisk()
     end
 end
