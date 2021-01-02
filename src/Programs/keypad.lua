@@ -112,6 +112,11 @@ end
 
 local function exit()
     exitButton:flash("Exit")
+    payload = {
+        ["action"] = "exitButton",
+        ["client_id"] = id
+    }
+    modem.transmit(channel, channel, signPayload(payload))
 end
 
 local function keypadHandler()
@@ -139,16 +144,6 @@ local function keypadHandler()
     end
 end
 
-local function modemHandler()
-    while true do
-        local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
-        if message == "rhs" then
-            handshake()
-            checkServerPublicKey()
-        end
-    end
-end
-
 local function keycardHandler()
     while true do
         local event, side = os.pullEventRaw("disk")
@@ -169,6 +164,16 @@ local function keycardHandler()
         end
         print("Ejecting disk")
         disk.ejectDisk()
+    end
+end
+
+local function modemHandler()
+    while true do
+        local event, side, frequency, replyFrequency, message, distance = os.pullEventRaw("modem_message")
+        if message == "rhs" then
+            handshake()
+            checkServerPublicKey()
+        end
     end
 end
 
