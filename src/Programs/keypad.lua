@@ -185,6 +185,7 @@ keypad:add(">", nil, 7, 5, 7, 5, colors.red, colors.orange)
 keypad:add("R", nil, 7, 1, 7, 1, colors.red, colors.orange)
 
 modem.open(channel)
+disk.ejectDisk()
 
 handshake()
 checkServerPublicKey()
