@@ -192,7 +192,7 @@ local function modemHandler()
                             print("Shutting Down...")
                             sleep(3)
                             os.shutdown()
-                        elseif action == "reboot" then
+                        elseif payload.action == "reboot" then
                             exitButtonMonitor.setBackgroundColor(colors.black)
                             exitButtonMonitor.clear()
                             keypadMonitor.setBackgroundColor(colors.black)
