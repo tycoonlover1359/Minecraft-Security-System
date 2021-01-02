@@ -178,6 +178,7 @@ local function modemHandler()
             local toVerify = message.payload .. message.timestamp
             if ecc.verify(serverPublicKey, toVerify, message.payload_signature) then
                 if os.epoch("utc") - message.timestamp < 15000 then
+                    local payload = json.decode(message.payload)
                     if payload.target == id or payload.target == "all" then
                         if payload.action == "shutdown" then
                             exitButtonMonitor.clear()
