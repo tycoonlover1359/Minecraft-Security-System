@@ -37,8 +37,15 @@ local exitButtonSize = {}
 exitButtonSize["X"], exitButtonSize["Y"] = exitButtonMonitor.getSize()
 
 local function exit()
-    exitButton:flash("Press To Exit")
+    exitButton:flash("Exit")
 end
 
-exitButton:add("Press To Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
-exitButton:run()
+local function button()
+    keypad:flash("1")
+end
+
+exitButton:add("Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
+
+keypad:add("1", button, 1, 1, 1, 1, colors.red, colors.lime)
+
+parallel.waitForAny(exitButton:run, keypad:run)
