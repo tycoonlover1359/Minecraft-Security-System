@@ -114,7 +114,7 @@ while true do
                             elseif payload.action == "tempOpen" then
                                 if not lockdownStatus then
                                     redstone.setOutput(outputSide, false)
-                                    sleep(payload.openTime)
+                                    sleep(payload.open_time)
                                     redstone.setOutput(outputSide, true)
                                 end
                             elseif payload.action == "startLockdown" then
