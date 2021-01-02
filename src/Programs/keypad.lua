@@ -42,7 +42,7 @@ end
 
 local function keypadHandler()
     while true do
-        local event = { keypad:handleEvents(os.pullEvent()) }
+        local event = { keypad:handleEvents(os.pullEventRaw()) }
         if event[1] == "button_click" then
             local label = event[2]
             keypad:flash(label)
@@ -53,5 +53,13 @@ end
 exitButton:add("Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
 
 keypad:add("1", nil, 1, 1, 1, 1, colors.red, colors.lime)
+keypad:add("2", nil, 4, 1, 4, 1, colors.red, colors.lime)
+keypad:add("3", nil, 7, 1, 7, 1, colors.red, colors.lime)
+keypad:add("4", nil, 1, 3, 1, 3, colors.red, colors.lime)
+keypad:add("5", nil, 4, 3, 4, 3, colors.red, colors.lime)
+keypad:add("6", nil, 7, 3, 7, 3, colors.red, colors.lime)
+keypad:add("7", nil, 1, 5, 1, 5, colors.red, colors.lime)
+keypad:add("8", nil, 4, 5, 4, 5, colors.red, colors.lime)
+keypad:add("9", nil, 7, 5, 7, 5, colors.red, colors.lime)
 
 parallel.waitForAny(function() exitButton:run() end, keypadHandler)
