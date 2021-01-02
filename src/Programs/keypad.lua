@@ -48,4 +48,4 @@ exitButton:add("Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.re
 
 keypad:add("1", button, 1, 1, 1, 1, colors.red, colors.lime)
 
-parallel.waitForAny(function() exitButton:run end, function() keypad:run end)
+parallel.waitForAny(function() exitButton:run() end, function() keypad:run() end)
