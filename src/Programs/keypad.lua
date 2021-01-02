@@ -194,4 +194,6 @@ parallel.waitForAny(
         exitButton:run() 
     end, 
     keypadHandler, 
-    modemHandler)
+    modemHandler,
+    keypadHandler
+)
