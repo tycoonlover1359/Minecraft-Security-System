@@ -25,6 +25,9 @@ elseif type == "mcss_pocket_admin" then
 elseif type == "mcss_redstone_controller" then
     print("Downloading MCSS Redstone Controller Client")
     download("Programs/rs_controller.lua", "main.lua")
+elseif type == "mcss_keypad" then
+    print("Downloading MCSS Keypad Client")
+    download("Programs/keypad.lua", "main.lua")
 end
 
 shell.run("main.lua")
