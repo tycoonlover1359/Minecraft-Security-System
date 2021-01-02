@@ -37,8 +37,8 @@ local exitButtonSize = {}
 exitButtonSize["X"], exitButtonSize["Y"] = exitButtonMonitor.getSize()
 
 local function exit()
-    exitButton:flash("Exit")
+    exitButton:flash("Press To Exit")
 end
 
-exitButton:add("Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
+exitButton:add("Press To Exit", exit, 1, 1, exitButtonSize.X, exitButtonSize.Y, colors.red, colors.green)
 exitButton:run()
