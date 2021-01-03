@@ -62,7 +62,6 @@ local function websocketHandler()
                         print("Closing Websocket Conection")
                         websocket.close()
                         print("Shutting down...")
-                        sleep(2.5)
                         os.shutdown()
                     end
                 elseif m.target == "all" then
@@ -81,7 +80,6 @@ local function websocketHandler()
                         print("Closing Websocket Conection")
                         websocket.close()
                         print("Shutting down...")
-                        sleep(2.5)
                         os.shutdown()
                     elseif m.action == "reboot" then
                         print("MCSS Network Reboot Command Received")

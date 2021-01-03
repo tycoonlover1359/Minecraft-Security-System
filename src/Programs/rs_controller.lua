@@ -87,7 +87,6 @@ while true do
                                     print("Closing Modem Connection")
                                     modem.closeAll()
                                     print("Shutting Down...")
-                                    sleep(3)
                                     os.shutdown()
                                 end
                             elseif payload.action == "reboot" then
@@ -96,7 +95,6 @@ while true do
                                     print("Closing Modem Connection")
                                     modem.closeAll()
                                     print("Rebooting...")
-                                    sleep(3)
                                     os.reboot()
                                 end
                             elseif payload.action == "redstoneUpdate" then
